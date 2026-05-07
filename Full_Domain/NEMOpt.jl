@@ -10,8 +10,8 @@ using Nonconvex, ChainRulesCore, Dates, Random, Distributions, SparseArrays, Lin
 Nonconvex.@load MMA
 println("Imported.")
 
-HOME_DIR = pwd()
-FOLDER_NAME = Dates.format(now(), "yymmdd-HHMMSS")
+HOME_DIR = @__DIR__
+FOLDER_NAME = "FD-" * Dates.format(now(), "yymmdd-HHMMSS")
 
 Parameters = []
 function createWorkspace()
@@ -117,7 +117,8 @@ function Create_Initial_Design()
     if !xor((@isdefined INITIAL_DESIGN_NAME), (@isdefined RANDOM_SEED))
         throw("Please provide 'INITIAL_DESIGN_NAME' OR 'RANDOM_SEED'")
     elseif @isdefined INITIAL_DESIGN_NAME
-        Initial_Design = getTopology("$HOME_DIR/Initial_Designs/$INITIAL_DESIGN_NAME", true)
+        initial_design_path = joinpath(HOME_DIR, "Initial_Designs", INITIAL_DESIGN_NAME)
+        Initial_Design = getTopology(initial_design_path, true)
     elseif @isdefined RANDOM_SEED
         Random.seed!(RANDOM_SEED)
         Initial_Design = rand(Uniform(0.0, 1.0), Int(N_Elements / 4))
