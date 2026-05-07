@@ -1,4 +1,4 @@
-# NEMOpt: Nonlinear Elastic Microstructural Topology Optimization
+# NEMOpt: Nonlinear Elastic Microstructural topology Optimization
 
 NEMOpt is a Julia-based research codebase for topology optimization of periodic nonlinear elastic microstructures, with a focus on designing metamaterials that exhibit targeted macroscopic behavior (for example, negative Poisson's ratio / auxetic response).
 
@@ -112,4 +112,4 @@ For each run, NEMOpt generates a timestamped workspace including:
 
 ## Citation
 
-If you use NEMOpt in academic work, please cite: Guven, M. and Ozdemir, I., "Topology Optimization of Nonlinear Elastic Micro-structures by a Domain Reduction Technique"
+If you use NEMOpt in academic work, please cite this GitHub repo and "Guven, M. and Ozdemir, I., 'Topology Optimization of Nonlinear Elastic Micro-structures by a Domain Reduction Technique'"
