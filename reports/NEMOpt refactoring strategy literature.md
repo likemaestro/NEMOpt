@@ -117,7 +117,7 @@ Julia's default `isapprox` tolerance (√eps ≈ 1.5e−8) cannot be used for ei
 | L1 kernels | P, 𝔸, Z, H, H′, g, g′, Ĥ, filter element matrices, node numbering, D1/D2 | Hash equality | Per-entry error within a small multiple of n·u; P and 𝔸 against AD to the measured 1e−10 | 𝔸(F = I) = ℂ; Z against central differences of 𝔸; objectivity; the thesis' printed 8×8 numberings | [Higham 2002](https://doi.org/10.1137/1.9780898718027); [Kanewala & Bieman 2014](https://doi.org/10.1016/j.infsof.2014.05.006) |
 | L2 single evaluation | U, four χ fields, P_M, 𝔸_M, ν, κ, Vf, Newton iteration counts and residuals | Hash equality | Within the measured legacy noise band and the κ-based bound | Uniform solid gives the exact 𝔸_m(F_M); uniform void gives εℂ; power-of-two scaling of E; periodic shift; 90° rotation; full ↔ half domain modulo a half-period shift; Wallin & Tortorelli §4.1 cases A and B | [Rosinski & Williamson 1997](https://doi.org/10.1137/S1064827594275534); [Wallin & Tortorelli 2020](https://doi.org/10.1016/j.mechmat.2020.103324) |
 | L3 sensitivities | ∂𝔸_M/∂ρ (all 16 components), ∇J, ∇g | Hash equality | L2 band propagated; aggregated versus per-component adjoint to about 1e−12 | Wallin & Tortorelli Table 1 (printed digits); article Table 1/2 replication; Taylor-remainder slope 2; complex step; dot-product tests | [Farrell et al. 2013](https://doi.org/10.1137/120873558); [Martins et al. 2003](https://doi.org/10.1145/838250.838251) |
-| L4 full runs | J, Vf, ν, κ histories; iterates; MMA counters; final design | Bitwise trajectory replay | Inside an ensemble of round-off-perturbed legacy runs, on pre-registered metrics | Article values at printed precision; Hashin–Shtrikman bound; thresholded re-analysis, measure of non-discreteness (M_nd), intersection-over-union (IoU) | [NASEM 2019](https://doi.org/10.17226/25303); [Sigmund 2022](https://doi.org/10.1007/s00158-022-03427-2); [Sigmund 2007](https://doi.org/10.1007/s00158-006-0087-x) |
+| L4 full runs | J, Vf, ν, κ histories; iterates; MMA counters; final design | Bitwise trajectory replay | Inside an ensemble of round-off-perturbed legacy runs, on pre-registered metrics | Article values at printed precision; thresholded re-analysis, measure of non-discreteness (M_nd), intersection-over-union (IoU); Voigt-type energy bound at F_M; Hashin–Shtrikman bulk bound only on the linear-limit tangent 𝔸_M(F_M = I) of thresholded designs (NDR-0064) | [NASEM 2019](https://doi.org/10.17226/25303); [Sigmund 2022](https://doi.org/10.1007/s00158-022-03427-2); [Sigmund 2007](https://doi.org/10.1007/s00158-006-0087-x) |
 
 At the kernel and evaluation levels, several analytic oracles are exact:
 - **Uniform solid (ρ ≡ 1).** The code's own definitions give g = H(1)^p = 1 and Ĥ(1) = 1. The exact periodic solution is the homogeneous deformation, so 𝔸_M must equal the neo-Hookean first elasticity tensor at F_M, and P_M the first Piola–Kirchhoff stress (article Eqs. 10, 16, 24–25).
@@ -168,7 +168,12 @@ At the trajectory level, link E3 needs explicit acceptance targets:
 | §5.2 case 2 | F_M = [1.025 0.025; 0.025 1.025]; V ≤ 0.4; 100×100 | ν = −0.9132 |
 | §5.3, three cases | V ≤ 0.6 | κ = 28.4368, 27.9679 and 24.1839 |
 
-These come from [article §5.2–5.3](https://doi.org/10.1016/j.finel.2026.104599). From Eq. 55, the two ν targets imply objective values of about 0.984 and 0.753 (inference). One plausibility check supports the code's bulk definition: κ = 28.4368 is 98.6% of the two-dimensional Hashin–Shtrikman upper bound of 28.85 for a porous solid at 60% solid (inference, from λ + μ = 96.15).
+These come from [article §5.2–5.3](https://doi.org/10.1016/j.finel.2026.104599). From Eq. 55, the two ν targets imply objective values of about 0.984 and 0.753 (inference). One plausibility check supports the code's bulk definition: κ = 28.4368 is 98.6% of the two-dimensional Hashin–Shtrikman upper bound of 28.85 for a porous solid at 60% solid (inference, from λ + μ = 96.15). This comparison is meaningful only because §5.3 case 1 (F_M = 1.0001·I) is essentially linear. Hashin–Shtrikman bounds are theorems for linear elastic moduli, so no such bound applies to the finite-strain tangent values of the other cases. Three further caveats apply:
+- the ε = 5e−4 floor raises the bound to 28.905 (computed);
+- p = 3 SIMP itself exceeds the bulk bound by up to 1.6% in gray elements under plane strain (computed);
+- applying the isotropic bulk bound to a square-symmetric cell's hydrostatic-strain modulus is an assumption still to be confirmed.
+
+NDR-0064 records how bounds are used from now on.
 
 Starting bands of ±0.02 on ν and 1–2% on κ are experience values. They must be replaced by the measured spread of the legacy ensemble before any comparison is run, because the thesis itself notes that a different initial design can lead to a different optimum topology ([thesis §7.1.2, pp. 54–55](https://gcris.iyte.edu.tr/handle/11147/13904)). Following Sigmund's point that fair evaluation is the authors' responsibility, final designs should be re-analyzed with one frozen evaluator, thresholded and compared on M_nd and IoU ([Sigmund 2022](https://doi.org/10.1007/s00158-022-03427-2)).
 
@@ -481,6 +486,31 @@ A separate addendum extends this report to buckling and elastic stability: [NEMO
 - verification benchmarks;
 - a constrain-first formulation for a future stability-aware paper.
 
-The decision log continues there as **NDR-0045 to NDR-0063**, all proposed. Two items in the addendum change records here:
+The decision log continues there as **NDR-0045 to NDR-0063**, all proposed, and NDR-0064 is recorded in the next section. Two items in the addendum change records here:
 - **The panel-table sentence** "Full-versus-half agreement ends at the first symmetry-breaking bifurcation" is amended. The *guarantee* of agreement ends there, but agreement itself may continue on an unstable symmetric branch. Agreement between the full and half cell is therefore never evidence of stability (addendum NDR-0051).
 - **NDR-0022's "logged LDLᵀ/LU fallback"** is refined. UMFPACK LU serves the solve after a Cholesky failure, and LDLᵀ runs only as a logged diagnostic, because it is unpivoted and 10–21× slower than Cholesky (addendum NDR-0047).
+
+## Decisions recorded after the addendum
+
+### NDR-0064: elastic bounds are checks only where they hold
+
+**Hashin–Shtrikman bounds are theorems for linear elastic moduli** ([Hashin & Shtrikman 1963, JMPS 11:127](https://garfield.library.upenn.edu/classics1988/A1988Q027300001.pdf)). They therefore cannot validate the finite-strain tangent values (𝔸_M, ν, κ at F_M ≠ I) that NEMOpt reports.
+
+**Nonlinear extensions exist but do not supply a tangent check:**
+- Talbot & Willis (1985) extended the variational principles to nonlinear media ([Milton, *Theory of Composites*](https://resolve.cambridge.org/core/books/theory-of-composites/variational-principles-and-inequalities/F55B22AA23653A981F56C1D0C9F22D78)).
+- Ponte Castañeda (1991, JMPS 39:45) gave Hashin–Shtrikman-type bounds through a linear comparison composite, and Ponte Castañeda (1989, Proc. R. Soc. A 422:147) extended the approach to finite elasticity ([summary](https://apps.dtic.mil/sti/pdfs/ADA231637.pdf); verified only through secondary sources).
+- These bound the effective *energy*, not tangent moduli.
+- They require convexity that finite-strain hyperelastic energies lack. Once instabilities appear, the homogenized energy may need a multi-cell infimum ([Müller 1987, ARMA 99:189](https://link.springer.com/doi/10.1007/s00205-016-0992-0), cited from a reference list).
+- The finite-strain results for porous rubbers are estimates for random microstructures, not bounds for periodic optimized cells ([Lopez-Pamies & Ponte Castañeda 2004, J. Elasticity 76:247](https://dialnet.unirioja.es/ejemplar/108150)).
+
+**Computed against the FEAD2026 constants** (plane strain, E = 100, ν = 0.3, so κ_s = 96.15 and μ_s = 38.46; [script](../research_notes/NEMOpt%20elastic%20bounds%20check/hs_simp_check.py)):
+- **2D Hashin–Shtrikman upper bulk bound for voids:** 15.38, 21.37 and 28.85 at solid fraction 0.4, 0.5 and 0.6. Modeling the void as the ε = 5e−4 material raises these to 15.44, 21.43 and 28.905.
+- **p = 3 SIMP exceeds the bulk bound** by up to 1.6% at a density of about 0.93. The excess vanishes at p = 3.5, which matches the 2D compatibility condition usually attributed to Bendsøe & Sigmund (1999), p ≥ max{2/(1 − ν₀), 4/(1 + ν₀)}, evaluated with the in-plane Poisson's ratio ν₀ = 0.4286 ([Bendsøe & Sigmund 1999](https://link.springer.com/doi/10.1007/s004190050248); the formula's exact form in the paper was not confirmed).
+- **Consequence:** a design that still contains gray elements can exceed the bound without any bug.
+
+**The one rigorous and simple finite-strain bound is Voigt-type.** Periodic homogenization defines the effective energy as a minimum over periodic fluctuations. Taking zero fluctuation as the trial field gives W̄(F̄) ≤ (1/|Ω|)∫ W_ρ(x, F̄) dV (standard derivation). The bound holds only if the computed state is the energy minimizer, so a violation flags either a bug or a non-minimizing, possibly unstable, branch. In linear elasticity, exceeding the Voigt bound is likewise tied to loss of stability ([Kochmann & Milton 2014](https://arxiv.org/pdf/1401.4142)).
+
+| ID | Proposed decision | Class | FEAD2026 value → proposed default | Acceptance evidence | Status |
+|---|---|---|---|---|---|
+| NDR-0064 | Use elastic bounds only where they hold. **(a) Linear limit:** apply the 2D Hashin–Shtrikman upper bound on the hydrostatic-strain bulk modulus κ = ¼(𝔸₁₁₁₁ + 𝔸₂₂₂₂ + 𝔸₁₁₂₂ + 𝔸₂₂₁₁) only to 𝔸_M(F_M = I). Apply it to thresholded designs, with the void modeled as the ε-material. Never apply it to raw gray designs (p = 3 SIMP exceeds the bound by up to 1.6%) or to finite-strain tangents. Do not apply the isotropic shear bound to anisotropic cells. **(b) Finite strain:** add a homogenized-energy output (new output; FEAD2026 arithmetic untouched) and check the Voigt-type bound W̄(F̄) ≤ (1/\|Ω\|)∫W_ρ(x, F̄) dV. Treat a violation as a bug or a non-minimizing branch, cross-referenced with the stability records NDR-0045 to NDR-0050. **(c)** Cite nonlinear Hashin–Shtrikman-type bounds and estimates for comparison only, never as acceptance tests. **(d)** This record amends the L4 oracle list and qualifies the §5.3 κ plausibility statement. | P (checks); B (energy output) | No bound checks; κ compared with the isotropic bound in prose → (a) and (b) as automated tests | Bound formulas reproduce the computed values (15.38 / 21.37 / 28.85; 28.905 with ε); F_M = I evaluations of thresholded regenerated designs stay below the bound within the measured noise band; the Voigt-type energy check passes on all golden-master states; before (a) becomes a hard gate, confirm in the composites literature (e.g., Milton 2002) that the bulk bound holds for the hydrostatic-strain modulus of anisotropic cells | proposed |
+
