@@ -8,6 +8,7 @@ Method:
 - Quotes are verbatim, so they keep the paper's British spelling ("grey", "analysed").
 - Numbers marked "computed" come from a scratch extension of `research_notes/NEMOpt elastic bounds check/hs_simp_check.py`. The scratch copy (`bs1999_check.py`) is outside the repository; the formulas it uses are listed in §5.
 - Tags: **[Paper]** means stated in the paper. **[Derived]** means my algebra from the paper's equations. **[Computed]** means numerical.
+- Both reports were modified by another process at 20:28 during this check; it added NDR-0065. Every "old" string quoted in §4 was re-checked afterwards and is still present verbatim at the line cited.
 
 ---
 
@@ -98,6 +99,7 @@ Further notes on the 3D form:
 | 0.6 | 14.2255 | 13.4168 | 13.4372 |
 
 - **Impact.** Reports and notes do not quote the shear numbers, and the p = 3 shear conclusion is unchanged (0.9996 → 0.99998, still ≤ 1). The script is, however, linked as NDR-0064 evidence, and its shear output is non-conservative. The fix is listed in §4.6.
+- **The same `z` line was copied** into `plane_stress_comparison.py` (NDR-0065 evidence, created concurrently at 20:28). That script uses only the bulk output, so its printed numbers are unaffected.
 
 ---
 
@@ -330,8 +332,22 @@ This is outside the four requested targets, but it is the linked NDR-0064 eviden
   New:
   > `(Bendsoe & Sigmund 1999, Eq. 11, p. 639; nu0 = 2D Poisson's ratio)`
 - Optional. Add a check that the bulk/shear ratios equal B&S Eq. 6 in closed form, and print the analytic peak H = 14/15 with ratio 1.0163.
+- Apply the same L12 fix to `plane_stress_comparison.py`, and have it also print the shear ratio (plane stress: 1.00047).
 
-### 4.7 Optional: buckling addendum
+### 4.7 Main report, NDR-0065 linear-constants table (L527–532)
+
+NDR-0065 was added concurrently and is outside the requested targets, but the paper bears on it directly.
+
+- **The issue.** The plane-stress cell "p = 3 SIMP against that bound: stays at or just below it (ratio 0.9999)" is true for the **bulk** bound only. With plane-stress constants, ν⁰ = 0.3, and B&S Eq. 11 is shear-governed: p\* = 4/1.3 = 3.08. So p = 3 SIMP exceeds the 2D HS **shear** bound by up to 0.05%: ratio 1.00047 at H = 0.988, analytic and computed with the corrected shear formula.
+- **Edit.** Add one row to the table:
+
+  | | Plane strain (FEAD2026) | Plane stress |
+  |---|---|---|
+  | SIMP threshold p\* (Bendsøe & Sigmund 1999, Eq. 11) | 3.5 (bulk-governed) | 3.08 (shear-governed; p = 3 exceeds the shear bound by up to 0.05%) |
+
+- **Generalized plane strain** [Derived; not covered by B&S]. Freeing one uniform out-of-plane stretch can only lower the energy relative to plane strain, and it is more constrained than pointwise plane stress. So the cell's in-plane moduli satisfy plane stress ≤ GPS ≤ plane strain. The plane-strain HS bound (κ_s = λ + μ) therefore stays a valid, possibly loose, upper bound in GPS mode, whereas the plane-stress HS bound is not guaranteed to bound GPS cells. Mention this in the "recompute the NDR-0064 bound values per mode" requirement.
+
+### 4.8 Optional: buckling addendum
 
 - **"Soft-band and void modes are separated before any verdict" (L143).** Add after the first sentence:
   > Bendsøe & Sigmund (1999, p. 651) already flag "localized modes which appear in low density regions and which should be filtered out" for buckling and vibration, citing Neves, Rodrigues & Guedes (1995).
