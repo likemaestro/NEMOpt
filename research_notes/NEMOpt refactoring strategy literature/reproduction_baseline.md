@@ -302,3 +302,8 @@ Use a layered suite. Layer 1 is fast deterministic kernel tests (constitutive, p
 ### Gaps
 - No published intermediate quantities (e.g. 𝔸_M of a known design, Newton iteration counts, or per-iteration histories as numbers) exist to anchor GM-5 to GM-8 externally. Those golden masters must be generated from the current code under a pinned environment.
 - The linear-response reference (ν = −0.9218) cannot be turned into a test without the absent LEMOpt code or a re-implementation, which would not be a reproduction of the authors' code.
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written.
+- **L244 (thesis semi-unit cell: zero fluctuation at edge midpoints and center).** Consistent but incomplete: Ohno, Matsuda & Wu 2001 (user-supplied, read in full) also have the fluctuation vanishing at the corners of parallelogram cells (Eq. 9 and p. 2870), and FEAD Eq. 50 prescribes them. Source: [LKO note](../NEMOpt%20supplied%20papers%20verification/lazarov_sigmund_2011_kubo_matsuda_2016.md), §3.6 edit 11.

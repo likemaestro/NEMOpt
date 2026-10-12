@@ -407,3 +407,4 @@ The text above is kept as first written. The items below correct it after the su
   - The absence of stability content is now confirmed for Saavedra Flores 2011, Ch. 4, as well as for the 2010 abstract.
   - The 2002 JMPS paper itself remains unread.
   - Source: [mechanics note](../NEMOpt%20supplied%20papers%20verification/open_access_mechanics_sources.md), Item 1.
+- **L252 (no source on the stability limits of the half cell), second pass.** Confirmed at the primary level: Ohno, Matsuda & Wu 2001 (user-supplied, read in full) makes no uniqueness, stability or bifurcation statement. Its half-cell validation is agreement with full-cell results (p. 2876), in an infinitesimal-strain rate setting where the rate solution is unique (inference). Source: [LKO note](../NEMOpt%20supplied%20papers%20verification/lazarov_sigmund_2011_kubo_matsuda_2016.md), §3.6 edit 9.

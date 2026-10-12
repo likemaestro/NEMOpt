@@ -328,3 +328,7 @@ Further corroboration: Dalklint et al. 2021 use l = 40/(2√3) mm for the Helmho
 | 4 | Haftka, Zhou & Queipo 2019 | **Obtained** (publisher free access) | https://link.springer.com/content/pdf/10.1007/s00158-019-02298-4.pdf |
 | 5 | Svanberg 2007 notes | **Needs the user** (a Wayback copy exists; host unreachable here) | https://web.archive.org/web/20220120004729/https://people.kth.se/~krille/mmagcmma.pdf |
 | 6 | Lazarov & Sigmund 2011 | **Needs the user** (no legal open copy; abstract only; checked via the 2016 review) | https://orbit.dtu.dk/en/publications/filters-in-topology-optimization-based-on-helmholtztype-different/ (record without file) |
+
+---
+*Update after the user supplied the papers (coordinator, 2026-10-12).* The text above is kept as first written.
+- **§6, Lazarov & Sigmund 2011.** The user supplied the version of record, and it was read in full ([`lazarov_sigmund_2011_kubo_matsuda_2016.md`](lazarov_sigmund_2011_kubo_matsuda_2016.md), §1). L-a and L-d are now verified in the primary text (Eq. 34; Eqs. 12–14). L-e is confirmed (p. 771: factorization reuse for relatively small problems). L-f is resolved. Final table, row 6: read "**Supplied by the user** (version of record)". The report edits proposed in §6 were superseded by primary citations.
