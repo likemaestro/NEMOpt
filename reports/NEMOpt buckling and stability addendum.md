@@ -332,3 +332,103 @@ NDR-0064 (elastic bounds as checks: Hashin–Shtrikman only in the linear limit,
 The addendum changes how NEMOpt's published numbers should be read more than how the code runs. The values ν = −0.9008 and −0.9132 are tangent properties of a principal branch that nobody has shown to be stable, and the design objective drives cells toward near-mechanisms, exactly where the cheap macroscopic test is weakest and symmetry-breaking or period-multiplying modes are most likely. Two findings make the problem tractable. The constituent provably cannot lose ellipticity at these strains, so any instability is a property of the geometry, the thing the optimizer controls. And almost every needed piece already exists in the code: the reduced tangent for k = 0, the D1/D2 offsets for Bloch phases, the four χ solves for 𝔸_M and the Z contraction for eigenvalue sensitivities. The stability module is mostly a reinterpretation of quantities NEMOpt already computes, attached where it cannot disturb a single bit of the FEAD2026 profile.
 
 The most informative next experiment is also the cheapest: run Tiers 0 and 1 on regenerated §5.2 case-2 and §5.3 case-2 optima from the bridge release. If they pass with margin, the published formulation gains a stability statement it never had. If they fail, the next paper starts from a documented, reproducible gap, finite-strain Bloch-aware stability constraints for homogenized microstructures, which the literature reviewed here has not yet published. Either way, the half-cell reduction keeps its speed only if its results are re-certified on the full cell, at the cost of one assembly, which is small next to the risk of reporting an optimum that sits on an unstable symmetric branch.
+
+## Revisions after full-text verification (2026-10-12)
+
+The supplied papers and the open-access sources were read in full and checked against this addendum. The verification notes are in [NEMOpt supplied papers verification](../research_notes/NEMOpt%20supplied%20papers%20verification/). Each note gives its recommended edits as "old text → new text". Short names below: "GMT note" (`geymonat_muller_triantafyllidis_1993.md`), "TNS note" (`triantafyllidis_nestorovic_schraad_2006.md`), "Michel note" (`michel_et_al_2007.md`), "B&S note" (`bendsoe_sigmund_1999.md`), "mechanics note" (`open_access_mechanics_sources.md`) and "optimization note" (`open_access_optimization_papers.md`). "Coordinator fact n" refers to the coordinator's instructions for this revision.
+
+Every decision record keeps its status: all remain proposed, and NDR-0063 remains "proposed (deferred)". Edits were located by text. Where the GMT, TNS and Michel notes edit the same sentence, the GMT edit was applied first, the TNS additions second and the Michel additions third, as the TNS note asks. Every "old" string matched the current wording unless a bullet says otherwise.
+
+Michel et al. (2007) needs a source caveat. The PDF supplied as "Michel 2007" was in fact Lopez-Pamies & Ponte Castañeda (2007), JMPS 55:1677–1701. Michel et al. (2007), JMPS 55(5):900–938, doi:10.1016/j.jmps.2006.11.006, was read from the HAL submitted version, and every Michel citation here is labeled accordingly (coordinator fact 7).
+
+**Applied: panel and disagreement tables**
+- Panel table, stability-theorist claim: the sentence that homogenized moduli are "meaningful only before" the first bifurcation is restated as what is proved. While the cell is stable against Bloch waves of every wave vector, the one-cell tangent equals every multi-cell tangent; beyond that point the linearized energy of a large enough body is unbounded below. Source: GMT note E1.
+- Panel table, stability-theorist source: Geymonat et al. 1993 now carries theorem numbers and "(full text verified)". Zhang et al. 2021 is kept as a restatement instead of being removed, because no note shows it to be wrong. Source: GMT note E2 (modified).
+- Panel table, group-theoretic row: Ohno, Matsuda & Wu 2001 marked "half-cell reduction only; no stability content in open restatements". Why: the row over-attributed the stability claims. Source: mechanics note, Item 1 (addendum L15 edit).
+- Disagreement table, row 7: the open item on compressible laminates is resolved. Micro and macro onsets coincide for stiff-layer fractions above about 0.15 in Geymonat et al.'s laminate; stiff-layer buckling comes first below that. The code check against Nestorović & Triantafyllidis 2004 is also noted, and Geymonat et al. is added to the source cell. Coincidence remains an expectation, not an acceptance criterion. Sources: GMT note E6; TNS note E6.
+
+**Applied: theory sections**
+- Theory paragraph on the inequality chain:
+  - Hypotheses and theorem numbers added: constituents strongly elliptic; β ≥ 0; Λ ≤ Λ₄ = Λ₅ ≤ α_𝕄 (Thm 3.3(i), Cor. 3.5, Lemma 4.2); Thm 3.4(ii)–(iii); Thm 5.1(ii).
+  - "Verified as relayed" upgraded to **verified**.
+  - Michel et al.'s Eq. 2.30 and "always vanish simultaneously" added as a co-author's restatement.
+  - Sources: GMT note E3 and its evidence-label list; Michel note E4 (restatement part only, see below).
+- Same paragraph, the "precedes or coincides" sentence, extended in three steps:
+  - Geymonat et al.'s laminate shows both cases (GMT note E4).
+  - Triantafyllidis et al.'s "always lies inside its macroscopic counterpart" (TNS note E1).
+  - Michel et al.'s porous-elastomer example of both cases (Michel note E4, inserted sentence).
+- Subtleties paragraph:
+  - The stability surface "can be" (not "is") discontinuous at the origin, because the long-wave limit can lie below the k = 0 value; Geymonat et al.'s Thm 3.3(i) and p. 278 are added.
+  - Triantafyllidis et al.'s separation of strictly periodic and long-wavelength modes and Michel et al.'s "singular" limit are added.
+  - New sentence: 𝔸_M exists only while the one-cell problem has a unique solution, so Tier 0a must pass for Tier 0b to mean anything.
+  - Sources: GMT note E5; TNS note E2; Michel note E5.
+
+**Applied: Bloch sampling, half cell and void modes**
+- Sampling paragraph, IBZ-contour sentence: added that Thomsen et al. also rest boundary-only sampling on studies "(but not proven)" and re-check final designs over the whole zone. Source: optimization note, §1 edit 3.
+- Sampling paragraph, Level 3:
+  - Triantafyllidis et al.'s full-zone π/18 grid added, with the unit conversion θ_i = 2ω_iL_i. Reproductions use at least a 36×36 full-zone grid.
+  - Michel et al.'s coarse scan, followed by a refined 2×2 aggregate, added as a precedent, with the warning not to transcribe their zero-average Bloch amplitudes.
+  - Sources: TNS note E3 (its "B-S2a" relabeled B-S2d, see below); Michel note E6.
+- Sampling paragraph, condensation sentence: now describes Triantafyllidis et al.'s Schur-complement LDU sign test, and that its sign is complete only if K_ii is positive definite; Haynsworth additivity removes that restriction. Source: TNS note E4.
+- Half-cell paragraph: Triantafyllidis et al.'s quarter-cell principal solution with a full-cell Bloch analysis is named as the closest precedent. The Saavedra Flores (2011) thesis chapter is added as a second source with no stability content. Sources: TNS note E5; mechanics note, Item 1 (the thesis finding, carried into the report to match the NDR-0051 Context edit).
+- Void-mode paragraph: Dalklint et al. 2021 upgraded from "verified at abstract level" to verified, with Eqs. 9, 10 and 20. Wang et al. 2014 keeps its abstract-level label. Bendsøe & Sigmund's (1999) warning about localized low-density modes is added. Sources: optimization note, §2 edit 1; B&S note §4.8 (optional edit).
+
+**Applied: benchmark suite**
+- Benchmark introduction: "the two that do (B-S1 and B-S2)" changed to "the ones that do (B-S1 and B-S2a to B-S2d)". Source: TNS note E10, adapted because the split gives five compressive tests, not three.
+- E-S4 basis cell: E-S4 is a Bloch-homogenization statement under NEMOpt's metric, not part of the Geymonat et al. chain. Source: Michel note E11.
+- B-S1 row:
+  - Added a compressible oracle on the σ₂₂ = 0 path: 0.8677 and 0.8162 for ν = 0.3, and Geymonat et al.'s 0.927, reproduced as 0.9267.
+  - Added the ν = 0.499 cross-check of the harmonic-mean reading (0.9043 and 0.8665), the Geymonat et al. citations, a link to the laminate scripts, and the Triantafyllidis et al. layered-cell code check.
+  - Sources: GMT note E7; TNS note E7.
+- B-S2 row replaced by four rows (new rows; see the judgment call below):
+  - B-S2a: Michel et al. square array, porosity π/16, true voids, κ/μ = 10, M-point onset and later loss of ellipticity with digitized targets.
+  - B-S2b: Michel et al., porosity 0.5, ellipticity targets only.
+  - B-S2c: the former porosity-0.5–0.6 Bertoldi case, qualitative. "Localization first below 0.34" is no longer an expectation.
+  - B-S2d: Triantafyllidis et al. soft and stiff inclusions.
+  - Sources: Michel note E7; TNS note E8; coordinator fact 7 (journal-version check before tolerances are fixed).
+- New row X-S2: Michel et al.'s cross-code targets (mixed-path long-wave onset; hexagonal arrays). Source: Michel note E8 (optional edit).
+- "Two benchmark limits" paragraph:
+  - Michel et al. and Triantafyllidis et al. are named as the exceptions that share NEMOpt's shear part and differ only in the volumetric term.
+  - With a test-only volumetric option, B-S2a, B-S2b and B-S2d become reproductions; B-S2c and other hole-array numbers stay cross-code comparisons. Volumetric locking at κ/μ = 98 is added as a caveat.
+  - Sources: TNS note E9, extended to Michel et al. per the Michel note's §2.1 law; the shared shear part follows from Michel et al.'s Eq. 4.2.
+
+**Applied: constrain-first formulation**
+- DTU-line sentence: the equation [K₀(k) + λK_σ(k)]φ = 0 was not Thomsen et al.'s. It is replaced by their (K_k − P G_k)φ_k = 0 (Eq. 16), sampled at seven points on the irreducible-zone boundary in their biaxial case. Source: optimization note, §1 edit 1.
+- Artificial-mode paragraph: added that Dalklint et al. 2021 also reject separate stiffness penalizations. Source: optimization note, §2 edit 2.
+- Smooth-floor sentence: Thomsen et al. Eq. 17 and Dalklint et al. Eq. 8 added. Source: optimization note, §1 edit 4 (optional edit).
+- Symmetry and validation paragraph: Thomsen et al. upgraded from "verified at abstract level" to verified, with the strength–robustness trade-off. The conforming-mesh practice is now attributed to Dalklint et al. 2022, because the 2021 paper used a conforming mesh only as a reference. Sources: optimization note, §1 edit 2 and §2 edit 3.
+
+**Applied: interactions table, template and decision log**
+- Interactions table, NDR-0031/NDR-0032 and NDR-0042 rows: "B-S2" changed to "B-S2a to B-S2d". Source: TNS note E11, adapted to the four-row split.
+- Worked template (NDR-0051), Context: the origin now states Ohno et al.'s scope. The source is small-strain and elastic-viscoplastic, assumes a point-symmetric state, and its fluctuations are odd and vanish at the C2 centers. There is no stability content per Matsuda et al. 2002 and Saavedra Flores 2011. Source: mechanics note, Item 1 (NDR-0051 Context edit).
+- NDR-0045, origin: theorem numbers for Geymonat et al.; Triantafyllidis et al. 2006 (p. 505) appended. Sources: GMT note E8; TNS note E15.
+- NDR-0048: the gradient (H¹-seminorm) metric is added as an option to evaluate for margins. Source: TNS note E14 (optional edit).
+- NDR-0049, literature: equation numbers for Geymonat et al.; Triantafyllidis et al. 2006 appended. Sources: GMT note E9; TNS note E15.
+- NDR-0050:
+  - "No pin for θ ≠ 0" sharpened to "pin only at θ = (0, 0)", rejecting Triantafyllidis et al.'s axis rule.
+  - The condensation option is now attributed to Triantafyllidis et al.'s Eq. 3.12, with Haynsworth additivity, and reproductions use a 36×36 grid.
+  - Acceptance now lists B-S2a to B-S2d.
+  - The literature cell is annotated, and Michel et al. 2007 added.
+  - Sources: TNS note E12 (four substitutions); Michel note E9.
+- NDR-0054:
+  - Suite list changed to X-S1–2, and the B-S2 split noted.
+  - The single B-S2 protocol is replaced by protocols for B-S2a to B-S2d, including the test-only volumetric term and, for B-S2d, the two-phase material map.
+  - Sources: TNS note E13; Michel note E10 (including its X-S1–2 change); coordinator fact 7.
+- NDR-0058: acceptance changed to "B-S1 and B-S2a to B-S2d". The origin now names Dalklint et al. 2021 (one-point approach) as the closer precedent and qualifies Thomsen et al. as a linear analogue. Sources: TNS note E11; optimization note, §1 edit 5.
+- NDR-0060, origin: Dalklint et al. 2021 and Bendsøe & Sigmund 1999, §7 appended. Sources: optimization note, §2 edit 5; B&S note §4.8 (optional edit).
+
+**Judgment calls**
+- **B-S2 split.** The TNS note (E8) and the Michel note (E7) each defined a different "B-S2a". The rows were reconciled as follows:
+  - Michel's labels were kept for its cases: B-S2a (porosity π/16) and B-S2b (porosity 0.5).
+  - Michel's qualitative B-S2c absorbed the TNS note's B-S2b (the Bertoldi case).
+  - The TNS note's B-S2a became B-S2d.
+  - Every cross-reference (benchmark introduction, sampling paragraph, interactions table, NDR-0050, NDR-0054, NDR-0058) uses this numbering.
+- **Michel et al.'s source label.** Michel et al. 2007 is cited as "HAL submitted version" rather than the Michel note's "HAL author version", per coordinator fact 7. Its digitized targets carry the instruction to check them against the journal version before tolerances are fixed.
+- **Bertoldi load path.** The B-S2c description of the Bertoldi load path as laterally traction-free is marked "assumed, not checked". The TNS note states it, while the Michel note lists it as unchecked.
+
+**Recommended edits not applied, or applied in modified form**
+- Michel note E4, first part: its new text still said the 1993 full text "could not be read" and kept "verified as relayed". That was superseded by GMT note E3, which verified the chain from the full text. Only Michel's restatement and the inserted porous-elastomer sentence were applied.
+- Michel note E7, form: one table row holding B-S2a, B-S2b and B-S2c in its cells. Applied as separate rows with the same content, so the IDs work as table keys (see the judgment call).
+- TNS note E8 and E13, "quantitative targets pending Michel et al. 2007 or Bertoldi et al. 2008": dropped, because Michel et al. 2007 now supplies the B-S2a and B-S2b targets.
+- TNS note E10 and E11, wording: written for a two-row split ("the three that do", "B-S2a and B-S2b"). Adapted to the four-row split.
+- GMT note E2: proposed removing the Zhang et al. links from the panel source cell. They were kept as a restatement (no note shows them wrong).
