@@ -471,3 +471,16 @@ The initial log follows. The classes are P (process or documentation), B (bitwis
 The most consequential finding is that the hardest requirement, provable sameness with a published article, is limited less by software than by missing records. Equivalence to the legacy code can be proven bitwise. Equivalence to the article can only be supported by evidence, because the inputs behind the published numbers were never committed: the initial designs, the Table 2 densities and the environment. **The cheapest way to strengthen that proof is the authors' own archives, not more code.** Each input recovered in Phase 0 turns a statistical acceptance band into an exact replay. Wallin & Tortorelli's fully specified verification case fills the other gap: it gives the refactor a correctness oracle that does not depend on any unpublished input, and it shows that the code is right where the article's printed Eq. 20 is not.
 
 Two further points matter for planning. First, NEMOpt is more faithful to its source formulation than the article's wording suggests. The clipped SIMP law, the ρ̃^p blend with its soft-element band, the symmetric sensitivity and the fixed center node are all inherited reference formulation, so changing them is a modeling choice for future studies, not a repair. What is genuinely NEMOpt-specific is ε = 5e−4, β̂ = 200, the continuation schedules, the MMA options and the Newton control, plus five likely defects: rounding, p/β updates before the gradient, per-evaluation counting, the unused `options` local and the β overshoot. That is exactly the set of switches the FEAD2026 profile must name. Second, reproduction and efficiency conflict less than they appear to. A substantial tranche of the speedup preserves every bit, and the resulting bridge release makes the expensive ensemble validation affordable without weakening any proof. Once named and recorded, the legacy behaviors become a citable methods baseline that the next paper can deviate from deliberately, with one decision record and one re-run number per change.
+## Addendum: buckling and elastic stability
+
+A separate addendum extends this report to buckling and elastic stability: [NEMOpt buckling and stability addendum](NEMOpt%20buckling%20and%20stability%20addendum.md). It covers:
+- the stability checks NEMOpt needs: one-cell k = 0 inertia, macroscopic ellipticity of 𝔸_M, and Bloch–Floquet scans;
+- when one-cell and half-cell results stop being valid;
+- the risk to the published load cases;
+- a read-only diagnostics architecture that leaves the FEAD2026 profile bitwise unchanged;
+- verification benchmarks;
+- a constrain-first formulation for a future stability-aware paper.
+
+The decision log continues there as **NDR-0045 to NDR-0063**, all proposed. Two items in the addendum change records here:
+- **The panel-table sentence** "Full-versus-half agreement ends at the first symmetry-breaking bifurcation" is amended. The *guarantee* of agreement ends there, but agreement itself may continue on an unstable symmetric branch. Agreement between the full and half cell is therefore never evidence of stability (addendum NDR-0051).
+- **NDR-0022's "logged LDLᵀ/LU fallback"** is refined. UMFPACK LU serves the solve after a Cholesky failure, and LDLᵀ runs only as a logged diagnostic, because it is unpivoted and 10–21× slower than Cholesky (addendum NDR-0047).
