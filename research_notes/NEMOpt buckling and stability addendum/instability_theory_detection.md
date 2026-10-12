@@ -378,3 +378,32 @@ Report the critical load factor t_c for every published design. Treat any result
 - There are no measured NEMOpt timings for factorizations and Bloch scans. The cost statements are relative estimates.
 - Whether the published NEMOpt designs pass Tier 0, Tier 1 or Tier 2 at their F_M is unknown. Running Tier 0 and Tier 1 on the published case-1 and case-2 designs is the cheapest decisive experiment.
 - I did not assess the sensitivity analysis (adjoint of eigenvalues along a nonlinear path) needed to turn the checks into optimization constraints. It is covered by finite-strain topology-optimization literature ([Dalklint et al. 2021](https://doi.org/10.1007/s00158-021-03012-z); [Zhang et al. 2023](https://doi.org/10.1016/j.cma.2023.116119)) and is out of this note's scope.
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written. The items below correct it after the supplied papers and open-access sources were read in full. Each item gives the corrected statement and the verification note that supports it. All notes are in [NEMOpt supplied papers verification](../NEMOpt%20supplied%20papers%20verification/). Line numbers refer to this file as of 2026-10-12.
+
+- **L21 (summary).** Two statements need qualification.
+  - "Exactly the k → 0 limit" holds at the linear level, at a state with β ≥ 0 and a positive cell-periodic constant: 𝔸̄ loses strong ellipticity if and only if the critical mode is long-wave (Geymonat et al. 1993, Thm 3.4(ii)–(iii), Cor. 3.5). For the nonlinear homogenized energy, only long-wave ⇒ loss of rank-one convexity is proved (Thm 5.1(ii)).
+  - "Lose their physical meaning" should read: one-cell homogenized moduli are certified only up to the first bifurcation. While the cell is Bloch-stable, the one-cell tangent equals every multi-cell tangent (Thm 3.3(iv)); beyond it the linearized energy of a large enough body is unbounded below (Prop. 3.2).
+  - Source: [GMT note](../NEMOpt%20supplied%20papers%20verification/geymonat_muller_triantafyllidis_1993.md), Q1 claims 2 and 5.
+- **L25 ("The full text was not accessible this session …").** Corrected: the full text was later read from a user-supplied copy, and the items below are confirmed with the qualifications in the GMT note. Source: GMT note E12.
+- **L26 ("general 3D periodic solids").** Corrected: "for the microscale stability of periodic solids of infinite extent in any dimension N ≥ 2 (Lemma 4.2)". Source: GMT note E13.
+- **L33 ("loss of rank-one convexity *is* long-wavelength microscale buckling").** Qualify as in the L21 item: at a state with β ≥ 0, B = 0 if and only if β(k → 0) = 0 (Geymonat et al. 1993, Cor. 3.5, which needs a positive cell-periodic constant). Source: GMT note, Q1 claims 2 and 9.
+- **L36 ("the stability surface β(k) is continuous at the origin").** Corrected: "and the stability surface β(k) is continuous at the origin (Zhang et al.; not stated by Geymonat et al., but it follows from their Thm 3.3(i): if Λ = Λ₆ then Λ₅ = Λ₆)". Source: GMT note E14.
+- **L37 ("The surface is discontinuous at the origin there").** Read "can be discontinuous". The general result is only Λ₅ ≤ Λ₆ (Thm 3.3(i)); the jump is explicit in Geymonat et al.'s laminate (p. 278). Source: GMT note, Q1 claim 4.
+- **L44 (Müller 1987).** Append: "formula verified as restated in Geymonat et al. 1993, Thm 2.3 and Eqs. 2.6–2.7 (Müller's own text not read)". Source: GMT note E15.
+- **L64 (Gaps: "The Geymonat et al. (1993) full text was not read …").** Resolved: the full text was read. For hypotheses and the k = 0 versus k → 0 relation (Λ₅ ≤ Λ₆), see the GMT note. Source: GMT note E16.
+- **L71 ("The established workflow (Triantafyllidis et al. 2006; …) has four steps").** Corrected: "The established workflow (Triantafyllidis et al. 2006 for steps 1–3, with an LDU sign test instead of an eigen-solve in step 2; Bertoldi & Boyce 2008; Zhang et al. 2021) has four steps". Triantafyllidis et al. do not retrieve modes; their Fig. 5 mode is Michel's computation. Source: [TNS note](../NEMOpt%20supplied%20papers%20verification/triantafyllidis_nestorovic_schraad_2006.md), §5 research-note edits (claim N3).
+- **L106 (Michel et al. 2007, "The abstract was not retrievable … As I recall it …").** Corrected: the full text was read from the HAL deposit hal-00111501 (submitted version).
+  - The paper compares second-order homogenization estimates of macroscopic loss of ellipticity (random, square and hexagonal arrays of circular holes) with the finite-element one-cell homogenized moduli.
+  - First-bifurcation curves come from 2×2 aggregates, after a single coarse Bloch scan of one case (square, porosity π/16).
+  - The PDF supplied as "Michel 2007" was in fact Lopez-Pamies & Ponte Castañeda (2007), JMPS 55:1677–1701.
+  - Source: [Michel note](../NEMOpt%20supplied%20papers%20verification/michel_et_al_2007.md), E12 and §0.
+- **L118 (Gaps: full texts not retrieved).** Corrected: Miehe et al. (2002), Bertoldi et al. (2008, JMPS) and Overvelde & Bertoldi (2014) remain unretrieved; Michel et al. (2007) was later read from HAL. Source: Michel note E12.
+- **L251–252 and L325 (Ohno–Okumura–Noguchi condition not read; no source on the stability limits of the half cell).**
+  - Update: the condition can now be cited from its open precursor, Okumura, Ohno & Noguchi 2000, JSME CMD 13:769, §2.3, Eqs. 15–18. It requires a nontrivial cell-periodic solution of the incremental cell problem with zero macroscopic strain and stress rates.
+  - "Symmetric bifurcation" there means that reversing the mode's sign leaves the macroscopic state unchanged. It is not point symmetry and not the half cell.
+  - The absence of stability content is now confirmed for Saavedra Flores 2011, Ch. 4, as well as for the 2010 abstract.
+  - The 2002 JMPS paper itself remains unread.
+  - Source: [mechanics note](../NEMOpt%20supplied%20papers%20verification/open_access_mechanics_sources.md), Item 1.

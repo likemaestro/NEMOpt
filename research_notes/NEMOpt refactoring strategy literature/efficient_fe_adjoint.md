@@ -258,3 +258,9 @@ On a uniform structured grid, all elements share the same reference-to-physical 
 ### Gaps
 - I did not verify Wu, Dick & Westermann (2016) or Schmidt & Schulz (2011) GPU papers directly. Their specific speedups for identical-element stencils are [UNVERIFIED].
 - I found no Julia-specific study of the speedup from precomputed geometric quantities in nonlinear TO; NEMOpt would need to benchmark it.
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written. The item below updates it after open-access sources were read on 2026-10-12. Supporting note: [open_access_optimization_papers.md](../NEMOpt%20supplied%20papers%20verification/open_access_optimization_papers.md), §6. Line numbers refer to this file as of 2026-10-12.
+
+- **L227 ("This is my inference from the Neumann volume-preservation statement plus periodicity.").** Corrected: "Wallin & Tortorelli 2020 state this explicitly (p. 9: periodicity "also conserves volume"); Dalklint et al. 2021 (p. 1753) note that Neumann BCs attract material to the boundaries." The Lazarov & Sigmund 2011 full text is still not accessible: there is no file on DTU Orbit, Wiley returns 403, and Semantic Scholar marks it closed (L208, L231 stand). Source: optimization note, §6 edit 5 and claim L-f.

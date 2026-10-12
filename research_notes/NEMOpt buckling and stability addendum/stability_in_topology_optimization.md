@@ -486,3 +486,19 @@ These seven points are synthesis or inference from the sources above. No single 
 - Zhang G, Khandelwal K (2019). *CMAME* 356:490–527. doi:10.1016/j.cma.2019.07.027
 - Zhang G, Feng N, Khandelwal K (2021). *IJNME* 122(22):6527–6575. doi:10.1002/nme.6802
 - Zhang G, Khandelwal K, Guo T (2023). *CMAME* 413:116119. doi:10.1016/j.cma.2023.116119 (arXiv 2303.14911)
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written. The items below correct it after open-access full texts were read. Each item gives the corrected statement and the verification note that supports it: [open_access_optimization_papers.md](../NEMOpt%20supplied%20papers%20verification/open_access_optimization_papers.md), called "optimization note" below. Line numbers refer to this file as of 2026-10-12.
+
+- **L112 (DTU line: "[K₀(k) + λK_σ(k)]φ = 0 … IBZ vertices plus one small-|k| point … KS aggregation over (k, mode) gives the objective").** Corrected: "then a linearized eigenproblem with Floquet–Bloch boundary conditions, (K_k − P G_k)φ_k = 0 in Thomsen et al. (Eq. 16), sampled at a handful of wave vectors (IBZ vertices, in Thomsen et al. also edge midpoints, plus one point near Γ for long-wave modes). Wang & Sigmund aggregate over (k, mode) with KS; Thomsen et al. use a min–max bound formulation (Eq. 19)." In Thomsen et al., K₀ denotes the stiffness reduced at k = 0 (Eq. 15). Source: optimization note, §1 edit 6.
+- **L117 (Thomsen, Wang & Sigmund 2018, "[PR-abs]" via the DTU Orbit record).** Corrected tag and link: "[PR, accepted manuscript read in full] — [DTU Orbit AAM](https://backend.orbit.dtu.dk/ws/files/147927301/MARAC_1_s2.0_S004578251830210X_main.pdf)". Source: optimization note, §1 edit 7.
+- **L180 (Gaps: Thomsen et al. full text not retrieved).** Corrected: "Thomsen et al. (2018), read from the DTU Orbit AAM: 7 k-points on the IBZ boundary for biaxial loading (Fig. 6) and about a dozen for uniaxial and mixed loading (Fig. 11); K = 25 eigenvalues and I = 10 bands; 200 × 200 Q4 elements; strength gains of 344% (square) and 379% (triangle) at bulk-modulus losses of 17–26%. The paper reports no CPU times and does not state how many stress directions trace each failure surface." Source: optimization note, §1 edit 8.
+- **L223 (Dalklint, Wallin & Tortorelli 2021, "[PR-abs]").** Corrected tag: "[PR, CC BY full text]". Source: optimization note, §2 edit 6.
+- **After L224 (new finding for the Dalklint et al. 2021 entry).**
+  - Transition: F = 1 + γ∇u, γ = H_{500,0.01}(ν̄^q) on the projected density (Eq. 9), and W = W^PH(γ∇u) + (1 − γ²)W^L(∇u) (Eq. 10).
+  - Eigenproblem K_oφ = −πK_gφ, with K_g ∝ γ² (Eqs. 20–21).
+  - p-norm aggregation (Eqs. 27–28).
+  - Table 1: 3325 modes with plain SIMP against 46 with the transition.
+  - Source: optimization note, §2 edit 6.
+- **L276 (Gaps: Dalklint et al. 2021 full text not retrieved).** Resolved from the CC BY version of record (see the L223 item and the bullet after L224). Source: optimization note, §2 edit 7.

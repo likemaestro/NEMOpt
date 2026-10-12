@@ -441,3 +441,14 @@ Define "same results" as a hierarchy of increasingly statistical acceptance crit
 ### Gaps
 - The FEAD 2026 article's own reported values (tables and figures, number of printed digits, run environment) were not examined in this note. Another workstream ("Establish reproduction baseline from article and code") is responsible for that.
 - The numeric pass thresholds above (e.g., 1e-10 for complex step, 1e-13 for dot products) are typical values from experience, not cited standards. They should be replaced with measured values from the legacy noise-floor runs.
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written. The items below update it after open-access full texts were sought on 2026-10-12. Supporting note: [open_access_optimization_papers.md](../NEMOpt%20supplied%20papers%20verification/open_access_optimization_papers.md), called "optimization note" below. Line numbers refer to this file as of 2026-10-12.
+
+- **L160 and L395 (Gaps: Sigmund 2022 full text not accessible).** Append: "No legal open copy exists as of 2026-10-12 (Springer paywall; DTU Orbit record without file; no arXiv)." The quoted abstract sentence is confirmed. It is conditional: "In the lack or impracticality of common benchmarks". The thresholding and binary-comparison practices (L135) remain secondary. Source: optimization note, §3 edit 4 and claims S-a and S-e.
+- **L296 (SMO "Replication of results"; "(wording via search snippet; direct fetch blocked by Springer authentication)").** Corrected parenthetical: "(guideline wording via search snippet, unverified; the editorial was read in full from the publisher's free PDF on 2026-10-12 and does not contain this sentence)". The sentence meant is the quoted "It is desirable that papers …".
+  - The editorial confirms the "detailed enough" description, the Plesser 2018 terminology point and the remark that almost all SMO papers concern computational algorithms (p. 405).
+  - It prescribes no fixed content. It recommends source code with a tagged version and DOI, all tuning and convergence parameters, plot data, intermediate results and repeated runs to show scatter (pp. 406–409).
+  - Source: optimization note, §4 edit 4 and claims H-c and H-e.
+- **L396 (Gaps: "the 2019 editorial's full text was not read").** Resolved: the editorial (Haftka, Zhou & Queipo 2019, SMO 60:405–409) was read in full from the publisher's free-access PDF. Only the current guideline wording remains snippet-based. Source: optimization note, §4.

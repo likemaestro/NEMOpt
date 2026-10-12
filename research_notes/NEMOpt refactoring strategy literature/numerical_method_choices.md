@@ -445,3 +445,50 @@ NEMOpt solves (r²∇ρ̃·∇w + ρ̃w) = ρw with periodic BCs and r = 1 eleme
 ### Gaps
 - The Lazarov & Sigmund 2011 derivation was not read directly. The 2√3 factor is verified via DTU code and secondary papers only.
 - Which r and mesh the authors actually used for each published figure cannot be determined from the article alone.
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written. The items below correct it after the supplied papers and open-access sources were read in full. Each item gives the corrected statement and the verification note that supports it. All notes are in [NEMOpt supplied papers verification](../NEMOpt%20supplied%20papers%20verification/). Short names: "B&S note" ([bendsoe_sigmund_1999.md](../NEMOpt%20supplied%20papers%20verification/bendsoe_sigmund_1999.md)), "mechanics note" ([open_access_mechanics_sources.md](../NEMOpt%20supplied%20papers%20verification/open_access_mechanics_sources.md)) and "optimization note" ([open_access_optimization_papers.md](../NEMOpt%20supplied%20papers%20verification/open_access_optimization_papers.md)). Line numbers refer to this file as of 2026-10-12.
+
+**Interpolation and Bendsøe & Sigmund (1999)**
+- **L36 ("Classic SIMP keeps a lower bound on the design variable").** Corrected: "Classic SIMP keeps a lower bound on the design variable ("0 < ρmin ≤ ρ, is usually imposed, in order to avoid a singular FEM problem", Bendsøe & Sigmund 1999, p. 638). The clip equals classic SIMP evaluated at max(H, ε^{1/p}), with the floor applied to the stiffness only, not to the variable or the volume." The same line's "neither classic nor modified SIMP" and its "SWITCH … new default = modified SIMP" are superseded by the main report: the clip is Wallin & Tortorelli's Eq. 71, and NDR-0033 keeps it as the default. Source: B&S note §4.5(a).
+- **L48 (Bendsøe & Sigmund 1999 bibliographic entry).** Volume, year and pages are confirmed from the PDF; the issue number "9–10" is not printed in the PDF. Source: B&S note §4.5(h), claim C4.
+- **L53 ("Sigmund 2007 and Andreassen et al. 2011 introduced and popularized "modified SIMP" …").** Corrected: "Sigmund 2007 and Andreassen et al. 2011 popularized "modified SIMP" (E_min + x^p ΔE, E_min ≈ 10⁻⁹E0) as a void regularization (not re-verified). The same algebraic form appears earlier as the two-material SIMP C(ρ) = ρ^p C¹ + (1 − ρ^p)C² ([PR] Bendsøe & Sigmund 1999, Eq. 23, citing Sigmund & Torquato 1997). It replaced the older approach of a lower bound x_min on the design variable with E = x^p E0 ([PR] Bendsøe & Sigmund 1999, p. 638), and it decouples void stiffness from the penalization." Source: B&S note §4.5(b).
+- **L54 ([PR-bib] "Bendsøe & Sigmund 1999 discuss physical realizability of SIMP: p must exceed a Poisson-ratio-dependent bound …").** Corrected and upgraded to [PR] (supplied PDF, read in full).
+  - SIMP satisfies the Hashin–Shtrikman bounds for a void/solid composite if and only if p ≥ p\*(ν⁰) = max{2/(1 − ν⁰), 4/(1 + ν⁰)} in 2D (Eq. 11, p. 639; the bulk and shear terms respectively).
+  - In 3D the condition is p ≥ max{15(1 − ν⁰)/(7 − 5ν⁰), (3/2)(1 − ν⁰)/(1 − 2ν⁰)} (Eq. 13, p. 640).
+  - In 2D, p\* ≥ 3, with equality "only for ν⁰ = 1/3". ν⁰ is the 2D Poisson's ratio (Eq. 9), so NEMOpt's plane-strain solid (ν⁰ = 0.4286) needs p ≥ 3.5; under plane stress (ν⁰ = 0.3) p\* = 3.08, set by shear.
+  - Compatibility is necessary for realization. Whether every compatible tensor is realizable "is still an open problem" (p. 639), but microstructures were designed for ν⁰ = 1/3 with p = 3 (Fig. 3) and for ν⁰ = 0 and 0.5 with p = 4 (Fig. 4).
+  - Source: B&S note §4.5(c).
+- **L55 (RAMP).** Corrected: "RAMP, E = E0 ρ/(1+q(1−ρ)), has non-zero slope at ρ = 0 (Stolpe & Svanberg 2001; Bendsøe & Sigmund 1999 predates and does not discuss RAMP). With q = 2 it coincides with their 2D Hashin–Shtrikman Young's-modulus bound ρE⁰/(3 − 2ρ) (Eqs. 7, 17; algebra)." Source: B&S note §4.5(d).
+- **After L68 (§1 Inferences), new inference: bound compatibility of the floors** (computed, plane strain).
+  - Against void, εC⁰ exceeds the 2D HS bulk bound for H < 1.75e−3.
+  - Against an ε-phase, the clip falls to 0.89 × the HS lower bulk bound at H = 0.0794, and modified SIMP to 0.99 × near H = 0.015.
+  - Near H = 0.93 both exceed the upper bulk bound by about 1.6% at p = 3.
+  - This is consistent with Bendsøe & Sigmund 1999, p. 647, and is irrelevant for black-and-white designs (p. 651).
+  - Source: B&S note §4.5(e).
+- **§3 Cited Findings (continuation; the note proposes it after L207), new finding.** [PR] Bendsøe & Sigmund 1999, p. 643: p-continuation "is often advisable", raising p "until the final design is arrived at for a power satisfying (11) or (13)". It is "a compromise, since initial designs will be analysed using an interpolation which is not realizable as a composite structure." NEMOpt's terminal p = 3 is below the plane-strain p\* = 3.5 (computed). Source: B&S note §4.5(f).
+- **L332 (plane-strain isotropic solid: Eq. 54 gives the in-plane ratio 0.4286).** Append: "This in-plane ratio is the ν⁰ that enters Bendsøe & Sigmund's 2D SIMP condition (1999, Eqs. 9 and 11)." Source: B&S note §4.5(g).
+- **L353 (Gaps: 2D Poisson bounds).** Append: "Bendsøe & Sigmund 1999 evaluate their 2D condition at ν⁰ = ±1 "(in 2-D)" (Eq. 12), consistent with the 2D range −1 ≤ ν ≤ 1. This is indirect support only." Source: B&S note §4.5(g).
+
+**Eq. 54 and Kazemi et al. (2020)**
+- **L310 and L314 (Eq. 54 "is attributed to Kazemi et al. [39]"; [PR-bib] Kazemi, Vaziri & Norato 2020).** Correction: the article's attribution, and thesis Eq. 7.5's "(Kazemi et al., 2020)", is incorrect.
+  - Kazemi et al.'s only Poisson's-ratio formula is Eq. 24 (p. 8 of the version of record; arXiv 1910.13313 has the same numbering): ν = C₁₁₂₂/[2(C₁₁₂₂ + C₁₂₁₂)], for 3D linear homogenization of cubic lattices.
+  - The paper contains no 2D formula and no (C₁₁₁₁ + C₂₂₂₂) form.
+  - Even for the isotropic FEAD2026 solid in plane strain the two differ: Eq. 54 gives 0.4286, the Kazemi form restricted to in-plane indices 0.300.
+  - NDR-0037's decision to keep Eq. 54 is unaffected; only the credit is wrong. Whether to issue an erratum is the authors' decision.
+  - Source: mechanics note, Item 2.
+- **L351 (Gaps: "Kazemi et al. 2020's exact wording and justification of the formula were not read").** Resolved: the paper was read (arXiv preprint and NSF PAR version of record). Eq. 24 is stated without justification and is not Eq. 54 (see the previous item). Source: mechanics note, Item 2.
+
+**Sigmund (2022)**
+- **L218 ("Per a search summary of its abstract …").** Corrected: "Its abstract (Springer page, read 2026-10-12) states that, in the absence of practical common benchmarks, "the responsibility of fair evaluation of contributions is up to authors"." Source: optimization note, §3 edit 3.
+- **L243 (Gaps: Sigmund 2022 full text not accessed).** Append: "No legal open copy exists as of 2026-10-12 (Springer paywall; DTU Orbit record without file; no arXiv)." Source: optimization note, §3 edit 4.
+
+**Svanberg's GCMMA tolerance**
+- **L25 ("far larger than GCMMA's conservativeness tolerance (1e-7)").** Corrected: "far larger than the 1e-7 slack (epsimin) in the conservativeness check of the Python port of Svanberg's GCMMA." Source: optimization note, §5 edit 2.
+- **L252 ("within ~1e-7 in Svanberg's code").** Corrected: "within epsimin = 1e-7 in the Python port of Svanberg's code (not checked against Svanberg 2007)". In the port, 1e−7 is primarily the subproblem tolerance, reused as the concheck slack and set by the GCMMA driver. Source: optimization note, §5 edit 3 and claim V-a.
+- **L281 (link rot; Svanberg's notes not retrieved).** Append: "Wayback snapshots exist (20210204193223, 20220120004729, 20250316062505; gcmma07.pdf 20230603101120) but `web.archive.org` was unreachable from the research container on 2026-10-12." Do not cite Svanberg 2007 for any parameter value until a snapshot has been read. Source: optimization note, §5 edits 4 and 5.
+
+**Filter length convention (Lazarov & Sigmund 2011)**
+- **L420 (DTU convention r = R/(2√3); "R ≈ 3.5 elements").** Corrected: "The DTU convention links the PDE length r to the classic cone or density filter radius R by r = R/(2√3), from matching second central moments on an unbounded domain (Lazarov, Wang & Sigmund 2016, Eq. 10, citing Lazarov & Sigmund 2011). NEMOpt's r = 1 element therefore corresponds to R ≈ 3.46 elements." Source: optimization note, §6 edit 3.
+- **L431 ("The source of the approximate R_min = r_min/(2√3) relation").** The letters are reversed against L420. Corrected: "The source of the approximate relation r = R/(2√3) (PDE length r, cone radius R; top82 writes `Rmin = rmin/2/sqrt(3)` with the letters reversed), per Lazarov, Wang & Sigmund 2016 (Eq. 10, ref. [93]); the 2011 full text has no legal open copy." Source: optimization note, §6 edit 4.

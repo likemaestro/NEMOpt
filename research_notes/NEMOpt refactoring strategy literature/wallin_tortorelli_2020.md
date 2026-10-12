@@ -651,3 +651,12 @@ They report figures only, with no numeric optimum values or timings. They are th
 ### Gaps
 - W&T publish no numeric optimized objective, ν values, iteration counts beyond Fig. 9, or run times, so no quantitative comparison with the article's −0.9008 / −0.9132 or κ values is possible.
 - W&T do not analyze the full (non-reduced) vs. reduced domain. The article's domain-reduction claims have no counterpart in W&T.
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written. The item below corrects it after Kazemi, Vaziri & Norato (2020) was read in full (arXiv 1910.13313 and the NSF PAR version of record). Supporting note: [open_access_mechanics_sources.md](../NEMOpt%20supplied%20papers%20verification/open_access_mechanics_sources.md), Item 2. Line numbers refer to this file as of 2026-10-12.
+
+- **L41 (row 21: "Eq. 54, citing [39]"; "Eq. 7.5, citing Kazemi"), L214 ("2𝔸₁₁₂₂/(𝔸₁₁₁₁ + 𝔸₂₂₂₂) at a fully prescribed F_M (Kazemi et al.)") and L244 (thesis Eq. 7.5, "(Kazemi et al., 2020)").** These record the article's and the thesis's citations correctly, but the attribution itself is incorrect.
+  - Kazemi et al.'s Eq. 24 (p. 8) is ν = C₁₁₂₂/[2(C₁₁₂₂ + C₁₂₁₂)], a 3D linear formula for cubic lattices. The paper contains no 2D formula and no (C₁₁₁₁ + C₂₂₂₂) form.
+  - Corrected statement: NEMOpt and the article use 2𝔸₁₁₂₂/(𝔸₁₁₁₁ + 𝔸₂₂₂₂) at a fully prescribed F_M (article Eq. 54, thesis Eq. 7.5). Both sources credit Kazemi et al. (2020), whose paper does not contain it. For a square-symmetric linear tensor, Eq. 54 equals the 2D uniaxial-stress ratio C₁₁₂₂/C₁₁₁₁.
+  - The deliberate deviation from Wallin & Tortorelli's ν₁₂ stands, and NDR-0037 keeps Eq. 54. Whether to correct the attribution in an erratum is the authors' decision.
