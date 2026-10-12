@@ -452,3 +452,13 @@ The text above is kept as first written. The items below update it after open-ac
   - It prescribes no fixed content. It recommends source code with a tagged version and DOI, all tuning and convergence parameters, plot data, intermediate results and repeated runs to show scatter (pp. 406–409).
   - Source: optimization note, §4 edit 4 and claims H-c and H-e.
 - **L396 (Gaps: "the 2019 editorial's full text was not read").** Resolved: the editorial (Haftka, Zhou & Queipo 2019, SMO 60:405–409) was read in full from the publisher's free-access PDF. Only the current guideline wording remains snippet-based. Source: optimization note, §4.
+
+**Third pass: Sigmund (2022), read in full** (user-supplied copy; [S&S note](../NEMOpt%20supplied%20papers%20verification/svanberg_2007_sigmund_2022.md), C.2)
+- **L134.** Confirmed from the full text (abstract, p. 1); 10 pp.; the PDF prints 65:315 without an issue number.
+- **L135 and L297 (secondary practices).** Primary citations replace the secondary ones, superseding "remain secondary" in the earlier item: (1) binary comparison: "the only fair comparison is based on thresholded 0-1 solutions" unless interpolation and filter settings are identical (§2.1, p. 2), with volume-preserving thresholding; (2) closeness: Sigmund compares thresholded objective values, not geometry. Up-sampling fails if (C01₁ − C01₂)/C01₂ > 5% (§2.7, p. 7), and designs are cross-evaluated (§2.3, Table 1).
+- **L155.** Sigmund allows reruns "with alternative starting guesses … as long as this is noted in the discussions" (§2.3, p. 4).
+- **L157.** Sigmund 2022, §2.17: list "all parameters, model and optimization settings" or supply the code.
+- **L160 and L395 (gaps).** Resolved: read in full. It contains no M_nd recommendation (M_nd is Sigmund 2007). Post-evaluation: §2.5. Code: §2.17. Data sharing is not discussed. It still has no legal open copy.
+- **L345.** Corrected: "Following Sigmund (2022, §§2.1, 2.3 and 2.5), compare against the FEAD 2026 designs fairly: same mesh, volume fraction and evaluator; thresholded designs re-analyzed and cross-evaluated; volume-corrected values if volumes differ. Report M_nd as well (Sigmund 2007; not part of Sigmund 2022)."
+- **L418.** Section numbers: Sigmund 2022, abstract, §§2.1, 2.3, 3.
+- **L241 (the next paper is not a code paper).** Consistent with Sigmund 2022, §2.17: very specific codes "are better left as supplementary material".

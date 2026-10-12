@@ -582,3 +582,9 @@ Refactor in two tracks.
 ### Gaps
 - Whether DR constraints are tangled (master and slave chains) cannot be determined without analyzing the DR mapping in the article and code. This should be handed to the reproduction-baseline and numerical-method researchers.
 - The exact number of objective evaluations per MMA02 outer iteration in the legacy runs (which drives the legacy continuation schedule) needs instrumentation of the legacy code.
+
+## Corrections after full-text verification (2026-10-12)
+
+The text above is kept as first written. Source: [S&S note](../NEMOpt%20supplied%20papers%20verification/svanberg_2007_sigmund_2022.md), C.2.
+- **L196.** Svanberg 2007 (§2, p. 3) advises solving again from the latest solution when problem data change. The notes also specify a complete subproblem solver (§5), useful for an in-house implementation.
+- **L259, item 2.** For MMA87 the value enters only as a constant (Svanberg 2007, §5), and NonconvexMMA's `KKTCriteria` stopping test does not read it; the rounded ν in the gradient is what changes the path.

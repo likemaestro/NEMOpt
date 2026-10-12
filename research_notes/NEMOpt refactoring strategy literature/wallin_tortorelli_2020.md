@@ -660,3 +660,7 @@ The text above is kept as first written. The item below corrects it after Kazemi
   - Kazemi et al.'s Eq. 24 (p. 8) is ν = C₁₁₂₂/[2(C₁₁₂₂ + C₁₂₁₂)], a 3D linear formula for cubic lattices. The paper contains no 2D formula and no (C₁₁₁₁ + C₂₂₂₂) form.
   - Corrected statement: NEMOpt and the article use 2𝔸₁₁₂₂/(𝔸₁₁₁₁ + 𝔸₂₂₂₂) at a fully prescribed F_M (article Eq. 54, thesis Eq. 7.5). Both sources credit Kazemi et al. (2020), whose paper does not contain it. For a square-symmetric linear tensor, Eq. 54 equals the 2D uniaxial-stress ratio C₁₁₂₂/C₁₁₁₁.
   - The deliberate deviation from Wallin & Tortorelli's ν₁₂ stands, and NDR-0037 keeps Eq. 54. Whether to correct the attribution in an erratum is the authors' decision.
+
+**Third pass: Svanberg (2007), read in full** (user-supplied copy; [S&S note](../NEMOpt%20supplied%20papers%20verification/svanberg_2007_sigmund_2022.md), C.2)
+- **L360.** Svanberg's 1987 paper was still not read. His 2007 notes list asyinit 0.5, asyincr 1.2, asydecr 0.7, move 0.5, albefa 0.1 and raa0 1e-5 as the 2007 implementation's defaults (p. 5).
+- **L350.** NEMOpt's `s_init` = 0.25 halves Svanberg's asyinit default; the notes call that direction more conservative (p. 5).

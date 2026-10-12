@@ -307,3 +307,6 @@ Use a layered suite. Layer 1 is fast deterministic kernel tests (constitutive, p
 
 The text above is kept as first written.
 - **L244 (thesis semi-unit cell: zero fluctuation at edge midpoints and center).** Consistent but incomplete: Ohno, Matsuda & Wu 2001 (user-supplied, read in full) also have the fluctuation vanishing at the corners of parallelogram cells (Eq. 9 and p. 2870), and FEAD Eq. 50 prescribes them. Source: [LKO note](../NEMOpt%20supplied%20papers%20verification/lazarov_sigmund_2011_kubo_matsuda_2016.md), §3.6 edit 11.
+- **Item 12 (L175), Svanberg 2007.** Svanberg's own default for the matching asymptote parameter (asyinit) is 0.5, and his notes set no inner cap (Svanberg 2007, p. 5 and §4). Source: [S&S note](../NEMOpt%20supplied%20papers%20verification/svanberg_2007_sigmund_2022.md), C.2.
+- **Item 2 (L160).** In NonconvexMMA every inner iteration moves the design to the trial point (`mma_algorithm.jl` L287, L310). Unlike Svanberg's GCMMA (2007, §4), a failed test does not reject the step. Source: S&S note, A.3.
+- **L125.** The 1987 values are not in the supplied 2007 notes, which describe the 2007 implementation, so the article's "default parameters given by [32]" cannot be checked against them. Source: S&S note, A.2.
