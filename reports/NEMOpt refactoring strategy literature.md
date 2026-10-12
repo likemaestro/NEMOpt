@@ -486,7 +486,7 @@ A separate addendum extends this report to buckling and elastic stability: [NEMO
 - verification benchmarks;
 - a constrain-first formulation for a future stability-aware paper.
 
-The decision log continues there as **NDR-0045 to NDR-0063**, all proposed, and NDR-0064 is recorded in the next section. Two items in the addendum change records here:
+The decision log continues there as **NDR-0045 to NDR-0063**, all proposed, and NDR-0064 and NDR-0065 are recorded in the next section. Two items in the addendum change records here:
 - **The panel-table sentence** "Full-versus-half agreement ends at the first symmetry-breaking bifurcation" is amended. The *guarantee* of agreement ends there, but agreement itself may continue on an unstable symmetric branch. Agreement between the full and half cell is therefore never evidence of stability (addendum NDR-0051).
 - **NDR-0022's "logged LDLᵀ/LU fallback"** is refined. UMFPACK LU serves the solve after a Cholesky failure, and LDLᵀ runs only as a logged diagnostic, because it is unpivoted and 10–21× slower than Cholesky (addendum NDR-0047).
 
@@ -513,4 +513,25 @@ The decision log continues there as **NDR-0045 to NDR-0063**, all proposed, and 
 | ID | Proposed decision | Class | FEAD2026 value → proposed default | Acceptance evidence | Status |
 |---|---|---|---|---|---|
 | NDR-0064 | Use elastic bounds only where they hold. **(a) Linear limit:** apply the 2D Hashin–Shtrikman upper bound on the hydrostatic-strain bulk modulus κ = ¼(𝔸₁₁₁₁ + 𝔸₂₂₂₂ + 𝔸₁₁₂₂ + 𝔸₂₂₁₁) only to 𝔸_M(F_M = I). Apply it to thresholded designs, with the void modeled as the ε-material. Never apply it to raw gray designs (p = 3 SIMP exceeds the bound by up to 1.6%) or to finite-strain tangents. Do not apply the isotropic shear bound to anisotropic cells. **(b) Finite strain:** add a homogenized-energy output (new output; FEAD2026 arithmetic untouched) and check the Voigt-type bound W̄(F̄) ≤ (1/\|Ω\|)∫W_ρ(x, F̄) dV. Treat a violation as a bug or a non-minimizing branch, cross-referenced with the stability records NDR-0045 to NDR-0050. **(c)** Cite nonlinear Hashin–Shtrikman-type bounds and estimates for comparison only, never as acceptance tests. **(d)** This record amends the L4 oracle list and qualifies the §5.3 κ plausibility statement. | P (checks); B (energy output) | No bound checks; κ compared with the isotropic bound in prose → (a) and (b) as automated tests | Bound formulas reproduce the computed values (15.38 / 21.37 / 28.85; 28.905 with ε); F_M = I evaluations of thresholded regenerated designs stay below the bound within the measured noise band; the Voigt-type energy check passes on all golden-master states; before (a) becomes a hard gate, confirm in the composites literature (e.g., Milton 2002) that the bulk bound holds for the hydrostatic-strain modulus of anisotropic cells | proposed |
+
+### NDR-0065: optional 2D kinematics modes
+
+FEAD2026 and the 2023 thesis use **plane strain**. Wallin & Tortorelli did not: their §5 cell is one layer of 3D bricks with the out-of-plane macro stretch left free, a **generalized plane strain** state with zero mean out-of-plane stress ([comparison note, Q8](../research_notes/NEMOpt%20refactoring%20strategy%20literature/wallin_tortorelli_2020.md)). Thin-sheet metamaterials call for **plane stress**.
+
+**At finite strain, plane stress is not a change of constants.** Each Gauss point needs a local Newton solve for the out-of-plane stretch so that S₃₃ = 0, and the tangent must be condensed accordingly. This is the approach of Klinkel & Govindjee (2002), cited from a later paper's description ([summary](https://arxiv.org/pdf/2007.05877)). A general formulation for compressible hyperelastic laws with open-source code is given by Ahmadi et al. ([arXiv:2410.22562](https://arxiv.org/pdf/2410.22562)).
+
+**Plane stress cannot represent out-of-plane deformation.** Thin perforated sheets often deform out of plane, which makes their Poisson's ratio much less negative than in-plane theory predicts ([Mizzi et al. 2020](https://eng.ox.ac.uk/media/9677/mizzi-ijms-2020.pdf)). Plane-stress stability verdicts are therefore in-plane only and optimistic for thin sheets.
+
+The choice also changes the linear constants, and with them the NDR-0064 bounds ([script](../research_notes/NEMOpt%20elastic%20bounds%20check/plane_stress_comparison.py); computed for E = 100, ν = 0.3):
+
+| | Plane strain (FEAD2026) | Plane stress |
+|---|---|---|
+| 2D bulk modulus of the solid | 96.15 | 71.43 |
+| In-plane Poisson's ratio of the solid | 0.4286 | 0.30 |
+| Hashin–Shtrikman bulk bound at 40% solid | 15.38 | 13.51 |
+| p = 3 SIMP against that bound | exceeds it by up to 1.6% | stays at or just below it (ratio 0.9999) |
+
+| ID | Proposed decision | Class | FEAD2026 value → proposed default | Acceptance evidence | Status |
+|---|---|---|---|---|---|
+| NDR-0065 | Add a `Kinematics2D` option with three modes. **PlaneStrain** is the default and reproduces FEAD2026. **PlaneStress** enforces S₃₃ = 0 at each Gauss point by a local Newton solve for the out-of-plane stretch, with a condensed tangent; Z is obtained by differentiating through the local solve and checked against automatic differentiation. **GeneralizedPlaneStrain** uses one uniform out-of-plane stretch per cell, with zero mean out-of-plane stress (one extra scalar unknown); it is the Wallin & Tortorelli §5 setting and enables formulation comparisons with that paper. Requirements: label plane-stress stability verdicts "in-plane modes only"; re-derive the closed-form ellipticity test (NDR-0049) for each mode; recompute the NDR-0064 bound values per mode. Implement after Phase 4; the option never alters the FEAD2026 profile. | A (option) | Plane strain only → three modes, plane strain default | FEAD2026 golden masters bitwise unchanged; homogeneous uniaxial and biaxial tests against the analytical 3D solution with σ₃₃ = 0 (plane stress) or zero mean σ₃₃ (generalized plane strain); in the linear limit, 𝔸_M(F_M = I) equals linear homogenization with the corresponding 2D constants; Z against automatic differentiation and central differences; NDR-0064 bounds recomputed per mode | proposed |
 
