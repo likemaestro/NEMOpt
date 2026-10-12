@@ -577,3 +577,69 @@ The authors want NEMOpt to become a general topology-optimization tool with high
 3. Implementation of NDR-0069 to NDR-0072 after Phase 4.
 4. NDR-0073 to NDR-0081 by research need.
 
+## Revisions after full-text verification (2026-10-12)
+
+The supplied papers and the open-access sources were read in full and checked against this report. The verification notes are in [NEMOpt supplied papers verification](../research_notes/NEMOpt%20supplied%20papers%20verification/). Each note gives its recommended edits as "old text → new text". Short names below: "GMT note" (`geymonat_muller_triantafyllidis_1993.md`), "Michel note" (`michel_et_al_2007.md`), "B&S note" (`bendsoe_sigmund_1999.md`), "mechanics note" (`open_access_mechanics_sources.md`) and "optimization note" (`open_access_optimization_papers.md`). "Coordinator fact n" refers to the coordinator's instructions for this revision. Every decision record keeps its status: all remain proposed, NDR-0067 remains "proposed (awaiting authors)" and NDR-0082 remains "proposed (deferred)". Edits were located by text, because the notes' line numbers predate NDR-0064 to NDR-0082. Every "old" string matched the current wording unless a bullet says otherwise.
+
+**Applied: panel, oracles and plausibility check**
+- Panel table, mechanician row: the symmetric-branch restriction is now marked as derived; Ohno et al. 2001 only assume a point-symmetric internal state. Why: no open source on the reduction discusses stability. Source: mechanics note, Item 1 (main L36 edit).
+- Panel table, methodologist row, and the L4 row of the tolerance table: Sigmund 2022 marked "(abstract only)". Why: no legal full text exists. Source: optimization note, §3 edit 2.
+- κ plausibility paragraph: the 28.85 bound now cites Bendsøe & Sigmund 1999, Eq. 6. Source: B&S note §4.3 (optional edit).
+- κ plausibility paragraph, list lead-in: "caveats" changed to "points", because the third item is now a confirmation. Second bullet: added that the 1.6% excess is expected, because p = 3 lies below the plane-strain threshold p\* = 3.5. Source: B&S note §4.3 (L173 edit).
+- κ plausibility paragraph, third bullet: "an assumption still to be confirmed" replaced by the confirmation. Milton 2002, Eq. 23.30 bounds the hydrostatic-strain modulus of any anisotropic two-phase cell; Bendsøe & Sigmund Eq. 21 gives the same result (derived). Why: Milton's §23.4 states the bound for any geometry of two well-ordered isotropic phases. Sources: mechanics note, Item 3 (main L171 edit); B&S note §4.3 (L174 edit, applied in its confirmed form); coordinator fact 4.
+- Sigmund paragraph after the acceptance-band sentence: now quotes the abstract with its condition ("without practical common benchmarks"). The frozen evaluator, thresholding, M_nd and IoU are now this report's own recommendation, with M_nd credited to Sigmund 2007. Why: the full text was not obtained. Source: optimization note, §3 edit 1.
+
+**Applied: behavior, erratum and speedup tables**
+- Rounding row: the 1e−7 tolerance is now attributed to the epsimin slack of the GPL Python port, not to "Svanberg's GCMMA code", and the port files are named. Why: Svanberg's 2007 notes could not be read. Source: optimization note, §5 edit 1.
+- Clip row, "Status and origin" cell: added that classic SIMP floors the density variable (Bendsøe & Sigmund 1999, p. 638). Source: B&S note §4.4 (optional edit).
+- Void-switch row and NDR-0034: Dalklint et al. 2021, Eq. 9 added as a second precedent for Ĥ(H(ρ̃)^p) with (500, 0.01). Source: optimization note, §2 edit 4.
+- Disagreement table, Poisson's-ratio row: the article's credit to Kazemi et al. is now marked incorrect. Kazemi et al.'s Eq. 24 (p. 8) is ν = C₁₁₂₂/[2(C₁₁₂₂ + C₁₂₁₂)] for 3D cubic lattices. The thesis cell notes the same attribution in Eq. 7.5, and the "Treat as" cell adds that an erratum is the authors' decision. Sources: mechanics note, Item 2 (main L240 edit); coordinator fact 5. The thesis and "Treat as" additions go beyond the note's edit and follow coordinator fact 5.
+- Speedup table, filter row: Lazarov & Sigmund 2011 marked "(filter definition; full text not read)". Source: optimization note, §6 edit 2.
+- Paper-traceability list: the SMO "Replication of results" item now cites p. 405 and summarizes the editorial's recommendations (pp. 406–409). Why: the editorial was read in full, and it fixes no content. Source: optimization note, §4 edit 1.
+
+**Applied: decision log NDR-0001 to NDR-0044**
+- NDR-0010: added SMO's advice to make repeated, slightly perturbed runs (Haftka et al. 2019, p. 407). Source: optimization note, §4 edit 2.
+- NDR-0033: added three facts, all quoting Bendsøe & Sigmund 1999. The clip equals classic SIMP evaluated at max(H, ε^{1/p}); modified SIMP has the form of their two-material SIMP (Eq. 23); bound compatibility does not separate the two laws. Decision and default unchanged. Source: B&S note §4.4.
+- NDR-0037: added that Eq. 54 does not appear in Kazemi et al. 2020 and that the article's and thesis Eq. 7.5's attribution is incorrect; an erratum is the authors' decision. The decision to keep Eq. 54 is unchanged. Sources: mechanics note, Item 2 (NDR-0037 edit); coordinator fact 5.
+- NDR-0039: the r = R/(2√3) convention now cites Lazarov, Wang & Sigmund 2016, Eq. 10 (a second-moment match on an unbounded domain). Source: optimization note, §6 edit 1.
+- NDR-0044: appended the SMO editorial's "detailed settings for results need to be documented" (p. 406). Source: optimization note, §4 edit 3.
+
+**Applied: NDR-0064 prose**
+- Talbot & Willis bullet: now "Hashin–Shtrikman variational principles", "geometrically linear setting", and page numbers in Milton 2002 (p. 271; §13.7, pp. 282–286). The author-hosted copy is linked; the existing Cambridge link is kept. Source: mechanics note, Item 3 (Talbot bullet).
+- Ponte Castañeda bullet: the secondary sources are now named: Milton 2002 for the 1991 bounds; Geymonat et al. 1993, p. 237 and Michel et al. 2007 for the 1989 paper. The label stays "secondary". Sources: mechanics note, Item 3 (optional Ponte Castañeda edit); GMT note, Q1 claim 19; Michel note, claim 3 (neither has an E-number).
+- Convexity and multi-cell bullet:
+  - The Müller (1987) link pointed to Duerinckx & Gloria (2016). It now points to doi:10.1007/BF00284506.
+  - The convexity wording is refined: geometrically linear setting, growth conditions, and convexity for the dual principles.
+  - The multi-cell infimum is stated with Geymonat et al.'s Thm 2.3 and Eqs. 2.6–2.7, Michel et al.'s Eq. 2.22 and Milton's §1.7.
+  - Added that the one-cell value stays exact while the cell is Bloch-stable (Prop. 5.3).
+  - Müller's evidence label changes from a reference-list citation to "verified as restated"; Müller's own text was not read.
+  - Sources: GMT note E10 and its evidence-label list; Michel note E2; mechanics note, Item 3 (convexity bullet); coordinator fact 6. The three notes give overlapping replacements for this bullet. They were merged: the mechanics note's convexity wording, then GMT E10's content, with Michel's and Milton's restatements added.
+- Porous-rubber bullet: replaced. The second-order results are Hashin–Shtrikman-type estimates, not bounds. They exist for periodic arrays too, are not conservative for periodic cells, and none exists for NEMOpt's topologies. Sources: Michel note E1; coordinator fact 7. Michel et al. 2007 is labeled "HAL submitted version", not the note's "author version", per coordinator fact 7. The supplied PDF, Lopez-Pamies & Ponte Castañeda 2007 (JMPS 55:1677–1701), is cited as read in full.
+- "Computed" list, bulk bullet: added that the values equal Bendsøe & Sigmund Eq. 6 (void limit) and Milton Eq. 23.30 at hydrostatic strain, with a link to the bound-check scripts. Sources: B&S note, claim C2; mechanics note F3.1 and its evidence note.
+- "Computed" list, new shear bullet: the corrected isotropic shear bounds (7.40 / 10.12 / 13.42) and the earlier, 6–9% too high values (7.96 / 10.82 / 14.23). It also gives the single-modulus bound from Milton Eq. 23.30 (12.41 / 16.03 / 19.89; 19.905 with the ε-material). Why: the scripts' 2D shear formula was wrong and was fixed in commit 5aa11db. Sources: coordinator facts 1 and 4; B&S note §1.4; mechanics note, side finding and F3.4.
+- "Computed" list, p = 3 bullet: replaced. The hedges on the attribution and on the formula's exact form are removed. The condition is Bendsøe & Sigmund 1999, Eq. 11, p. 639, and ν⁰ is the in-plane Poisson's ratio: p\* = 3.5 under plane strain, 3.08 (set by shear) under plane stress. The bullet also gives the analytic peak (1.0163 at H = 14/15) and the plane-strain shear ratio 0.99998. Sources: B&S note §4.1 and §1.3; coordinator fact 3.
+- "Consequence" bullet: appended Bendsøe & Sigmund's view that bound compatibility of gray is optional for black-and-white designs. Source: B&S note §4.1 (optional edit).
+- Voigt-type paragraph: the effective energy is now an infimum over supercell-periodic fluctuations. NEMOpt's one-cell value bounds it from above, and the computed energy obeys the bound only at the one-cell minimizer. Source: GMT note E11.
+
+**Applied: NDR-0064 and NDR-0065 records**
+- NDR-0064 (a), scope: the bulk bound holds for any thresholded two-phase cell at F_M = I and can serve as a hard gate there. Source: coordinator fact 4 (mechanics note, Item 3).
+- NDR-0064 (a), gray designs: the 1.6% excess is now explained by p = 3 < p\* = 3.5. Source: B&S note §4.2(a).
+- NDR-0064 (a), shear: the isotropic shear bound needs isotropy. For a single shear modulus, use Milton Eq. 23.30 at pure shear (12.41 / 16.03 / 19.89; 19.905 with ε), which equals Bendsøe & Sigmund's Eq. 21 limit (39.8 on 𝔸₁₂₁₂ + 𝔸₂₁₂₁). The square-symmetric trace bound is optional. Sources: B&S note §4.2(b); mechanics note, Item 3 (NDR-0064 (a) edit); coordinator fact 4.
+- NDR-0064 (c): second-order estimates are named. They predict only macroscopic onset and overestimated finite-element onset strains by up to about a factor of two, so they never certify stability. Source: Michel note E3.
+- NDR-0064 acceptance cell:
+  - Bound values tie to Bendsøe & Sigmund Eq. 6 and Milton Eq. 23.30, and the corrected shear values were added (commit 5aa11db).
+  - "Confirm in the composites literature before a hard gate" is replaced by the Milton confirmation, so (a) can be a hard gate for thresholded two-phase designs at F_M = I.
+  - Sources: B&S note §4.2(c) and (d); mechanics note, Item 3 (acceptance edit); coordinator facts 1 and 4.
+- NDR-0065 table: the plane-stress cell said p = 3 SIMP "stays at or just below" the bound without qualification. It now says this holds for the bulk bound (ratio 0.9999), while p = 3 SIMP exceeds the shear bound by up to 0.05% (ratio 1.00047 at density 0.988). The row label now names both bounds, and the plane-strain cell adds the shear ratio 0.99998. Sources: coordinator fact 2; B&S note §4.7. No other prose in either report made the unqualified claim.
+- NDR-0065 table, new row "SIMP threshold p\*": 3.5 (bulk-governed) under plane strain and 3.08 (shear-governed) under plane stress. Source: B&S note §4.7.
+- NDR-0065 lead-in sentence: the shear ratios come from the corrected formula (commit 5aa11db). Source: coordinator fact 1.
+- NDR-0065 record, requirements: added that the plane-strain bound stays valid, possibly loose, in generalized plane strain, while the plane-stress bound is not guaranteed there (inference). Source: B&S note §4.7 (generalized plane strain).
+
+**Recommended edits not applied, or applied in modified form**
+- B&S note §4.2(c) and §4.3 (L174): "cross-check Eq. 21 against Allaire & Kohn or Milton before (a) becomes a hard gate". Not applied as worded, because the cross-check is done: Milton 2002, Eq. 23.30 confirms the bound (coordinator fact 4).
+- B&S note §4.6 (evidence-script edits): not applied here. Scripts were outside the files this revision may edit, and the fix is already in commit 5aa11db (coordinator fact 1).
+- Mechanics note, Talbot bullet: the proposed text drops the Cambridge link. The link was kept and the author-hosted copy added, because no note shows the link to be wrong.
+- GMT note E10, first sentence ("They require convexity that finite-strain hyperelastic energies lack"): replaced by the mechanics note's more precise wording, which rates that sentence "partly supported"; E10's substance is kept in full.
+- Optimization note, §5 edit 5 (cite no Svanberg 2007 parameter value until a snapshot is read): a standing rule, not a text edit. The reports cite no such value.
+- NDR-0005 errata list: not extended with the Kazemi attribution, because no note proposes it. The correction is stated in the Poisson's-ratio row and in NDR-0037, and whether it becomes an erratum is the authors' decision.
+- NDR-0076 still cites Kazemi, Vaziri & Norato 2020, for multi-material design (the article's ref. [39]). That citation does not concern Eq. 54, so it was kept.
