@@ -1,6 +1,6 @@
-# Verifying that a refactored NEMOpt reproduces the published results, and recording refactoring decisions for a new article
+# Verifying that a refactored NEMOpt reproduces the published results, and recording refactoring decisions for a new TO research paper
 
-Scope: how to define and show "same results" when refactoring NEMOpt (Julia; Güven & Özdemir, FEAD 260 (2026) 104599, doi:10.1016/j.finel.2026.104599) at four levels: (a) kernels, (b) single deterministic evaluations, (c) sensitivities, (d) full optimization runs. Also how to record every refactoring decision so the refactored code can support a new, separate article. Researched October 2026.
+Scope: how to define and show "same results" when refactoring NEMOpt (Julia; Güven & Özdemir, FEAD 260 (2026) 104599, doi:10.1016/j.finel.2026.104599) at four levels: (a) kernels, (b) single deterministic evaluations, (c) sensitivities, (d) full optimization runs. Also how to record every refactoring decision so a new, separate topology-optimization research paper that uses the refactored code can cite exactly what was run, how it was verified against FEAD 2026, and which formulation choices were deliberately changed. Researched October 2026.
 
 Source labels: **[PR]** peer-reviewed journal or proceedings; **[Book]**; **[Report]** technical report, standard, or consensus report; **[Docs]** official software documentation; **[Grey]** blog, website, template, or secondary summary. **(mem)** means the bibliographic details come from prior knowledge and were not re-fetched in this session. Check the DOI of every (mem) item before final citation. **[repo]** means a direct observation of the NEMOpt source at the stated file and line (read-only inspection, Oct 2026).
 
@@ -235,96 +235,122 @@ The consensus practices are: track how every result was produced, version-contro
 
 ---
 
-## Q7. (Scope addition) Recording every refactoring decision so that the refactored code can support a NEW, separate article
+## Q7. (Scope addition) Recording every refactoring decision so the refactored code can support a NEW topology-optimization research paper
 
 ### Takeaway
-Use lightweight, immutable, numbered decision records (Nygard ADRs or MADR) stored in the repository. Each record links context, alternatives, rationale with citations, whether it changes numerical results (with a legacy switch name), verification evidence (test IDs and tolerance bands from Q1–Q5), and benchmark numbers reported per Hoefler & Belli. Pair them with:
-- a changelog and semantic versioning;
-- git tags archived with DOIs (Zenodo), plus CITATION.cff;
-- run-level provenance (DrWatson `tagsave`).
+The next publication is a TO *research* paper that uses the refactored code, not a paper about the code. The decision trail therefore has to serve that paper's methods and reproducibility statements. It needs six things:
+- **(a)** Every reported result traces to an exact formulation, parameter set, and archived code release with a DOI.
+- **(b)** A citable verification record shows that the refactored code reproduces the FEAD 2026 results, and to what tolerance.
+- **(c)** An explicit register lists each deliberate deviation from the 2026 formulation, with rationale and citations.
+- **(d)** The target journal's replication and data rules are met: SMO's mandatory "Replication of results" section, the fair-comparison expectations of Sigmund (2022), and Elsevier's data options for FEAD/CMAME.
+- **(e)** Run-level provenance (commit, parameters, seeds, environment) is stored with every result.
+- **(f)** If computational cost is reported, Hoefler–Belli and Chen–Revels practice is followed.
 
-The new article then has a traceable answer to three questions: which results of the 2026 FEAD article the new code reproduces (and to what tolerance), which change because of deliberate corrections, and which gains are algorithmic vs. implementation speedups. Target venues differ: JOSS and SoftwareX review the *software*, and SMO requires a "Replication of results" section. All of them expect public code, tests, and documented performance claims.
+Lightweight, immutable, numbered decision records (Nygard / MADR), extended with numerics fields, are the vehicle that ties (a)–(f) together.
 
 ### Cited Findings
-**Architecture/design decision records**
+**Decision records: the vehicle**
 - **Nygard ADRs (2011).** Five parts: Title, Context, Decision, Status ("proposed", "accepted"; later "deprecated" or "superseded" with a reference to the replacement), and Consequences. "ADRs will be numbered sequentially and monotonically. Numbers will not be reused." "If a decision is reversed, we will keep the old one around, but mark it as superseded." "The whole document should be one or two pages long." Store them "in the project repository under doc/arch/adr-NNN.md". — [Grey, foundational practitioner source] Nygard, M. (15 Nov 2011). Documenting Architecture Decisions. [Cognitect blog](https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
 - **Tyree & Akerman (2005).** Argue that explicitly documenting major architecture decisions makes the architecture transparent and clarifies its rationale. They provide a decision template; its full field list was not verified here; secondary sources describe it as having extensive traceability to requirements, principles, and related artifacts. — [PR] Tyree, J., Akerman, A. (2005). Architecture decisions: demystifying architecture. *IEEE Software* 22(2):19–27, [IEEE Xplore 1407822](https://ieeexplore.ieee.org/document/1407822) (DOI 10.1109/MS.2005.27 (mem))
-- **Jansen & Bosch (2005).** Treat software architecture as a set of architectural design decisions, which helps trace decisions and keep conceptual integrity (content via secondary slides). — [PR] Jansen, A., Bosch, J. (2005). Software architecture as a set of architectural design decisions. *5th Working IEEE/IFIP Conf. on Software Architecture (WICSA'05)*, pp. 109–120, IEEE; citation as listed in [arXiv:1704.04798 references](https://arxiv.org/pdf/1704.04798) (DOI 10.1109/WICSA.2005.61 (mem))
-- **MADR 4.0.0 (2024-09-17).** "Markdown Architectural Decision Records". Front matter: status, date, decision-makers, consulted, informed. Body: Title, Context and Problem Statement, Decision Drivers, Considered Options, Decision Outcome, Consequences, *Confirmation*, Pros and Cons of the Options, More Information. Dual-licensed MIT OR CC0-1.0. — [Docs] [MADR](https://adr.github.io/madr/)
+- **Jansen & Bosch (2005).** Treat software architecture as a set of architectural design decisions, which helps trace decisions and keep conceptual integrity (content via secondary slides). — [PR] Jansen, A., Bosch, J. (2005). Software architecture as a set of architectural design decisions. *WICSA'05*, pp. 109–120, IEEE; citation as listed in [arXiv:1704.04798 references](https://arxiv.org/pdf/1704.04798) (DOI 10.1109/WICSA.2005.61 (mem))
+- **MADR 4.0.0 (2024-09-17).** "Markdown Architectural Decision Records". Front matter: status, date, decision-makers, consulted, informed. Body: Title, Context and Problem Statement, Decision Drivers, Considered Options, Decision Outcome, Consequences, *Confirmation*, Pros and Cons of the Options, More Information. MADR says it can record any decision, not only architectural ones. Dual-licensed MIT OR CC0-1.0. — [Docs] [MADR](https://adr.github.io/madr/)
 - **Empirical evidence on ADR use.** A GitHub mining study found ADR use growing each year but adoption still low. About 50% of repositories with ADRs contain only 1–5 of them. Sustained use is a team effort over a long period, and most projects use Nygard's template. — [PR] Buchgeher, G., Schöberl, S., Geist, V., Dorninger, B., Haindl, P., Weinreich, R. (2023). Using architecture decision records in open source projects—an MSR study on GitHub. *IEEE Access* 11:63725–63740 ([JKU record](https://research.jku.at/en/publications/using-architecture-decision-records-in-open-source-projects-an-ms/); [DOAJ](https://doaj.org/article/f838f2a538ea48e7a3b15ce99befe612))
-- An ICSA 2026 study of 921 repositories and about 5,800 ADRs reports that about 63% were created directly as "accepted", skipping the deliberation ADRs are meant to capture. — [PR, conference listing] [ICSA 2026: ADR adoption impact and developer engagement](https://conf.researchr.org/details/icsa-2026/icsa-2026-papers/34/Architecture-Decision-Records-Adoption-Impact-and-Developer-Engagement-in-Open-Sou) (findings from abstract only)
-- An industrial action-research study (Chalmers, 2023) notes "little empirical evidence and research on how Architecture Decision Records are used in practice". Challenges include culture, tacit knowledge, documentation process, and tooling. — [PR] [Chalmers research record 538920](https://research.chalmers.se/en/publication/538920)
-- **ISO/IEC/IEEE 42010 (mem).** The architecture-description standard (2011; revised 2022) includes recording architecture decisions and their rationale as part of an architecture description. — [Report/Std] ISO/IEC/IEEE 42010:2022, [iso.org/standard/74393](https://www.iso.org/standard/74393.html) (mem; clause numbers not verified)
+- An ICSA 2026 study of 921 repositories and about 5,800 ADRs reports that about 63% were created directly as "accepted", skipping the deliberation ADRs are meant to capture. — [PR, conference listing] [ICSA 2026](https://conf.researchr.org/details/icsa-2026/icsa-2026-papers/34/Architecture-Decision-Records-Adoption-Impact-and-Developer-Engagement-in-Open-Sou) (abstract only)
+- An industrial action-research study notes "little empirical evidence and research on how Architecture Decision Records are used in practice". — [PR] [Chalmers research record 538920](https://research.chalmers.se/en/publication/538920)
+- **ISO/IEC/IEEE 42010 (mem).** The architecture-description standard (2011; revised 2022) includes recording decisions and their rationale. — [Std] [ISO/IEC/IEEE 42010:2022](https://www.iso.org/standard/74393.html) (mem; clause wording not verified)
 
-**Provenance, versioning, citation**
-- **Software citation principles (2016).** Six principles. Two confirmed in this session: *Accessibility* (citations should give access to the software and its metadata/documentation) and *Specificity* (citations should identify "the exact version used", e.g., version or revision numbers). — [PR] Smith, A.M., Katz, D.S., Niemeyer, K.E., FORCE11 Software Citation WG (2016). Software citation principles. *PeerJ Computer Science* 2:e86, [doi:10.7717/peerj-cs.86](https://doi.org/10.7717/peerj-cs.86)
-- **Software citation guide (2021).** Persistent identifiers and core metadata are essential. The guide covers citing one's own and others' software and is meant to be adapted by journals. — [PR] Katz, D.S., Chue Hong, N.P., et al. (2021). Recognizing the value of software: a software citation guide. *F1000Research* 9:1257 (v2), [doi:10.12688/f1000research.26932.2](https://doi.org/10.12688/f1000research.26932.2)
-- **FAIR4RS:** see Q6. Its emphasis on "continuous evolution and versioning" motivates version-specific identifiers. — [PR] Barker et al. 2022, [doi:10.1038/s41597-022-01710-x](https://doi.org/10.1038/s41597-022-01710-x)
-- **Releases, DOIs, CITATION.cff, changelog, SemVer (mem):**
-  - GitHub's Zenodo integration archives each tagged release and mints a version DOI plus a concept DOI. — [Docs] [GitHub Docs: Referencing and citing content](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content) (mem)
-  - CITATION.cff (Citation File Format) is recognized by GitHub and Zenodo. — [Docs] [citation-file-format.github.io](https://citation-file-format.github.io/) (mem)
-  - Keep a Changelog 1.1.0 groups changes per version under Added/Changed/Deprecated/Removed/Fixed/Security. — [Docs] [keepachangelog.com](https://keepachangelog.com/en/1.1.0/) (mem)
-  - Semantic Versioning 2.0.0, MAJOR.MINOR.PATCH, which Julia Pkg compat relies on. — [Docs] [semver.org](https://semver.org/) (mem)
-- **Run provenance:** DrWatson `tagsave`/`@tagsave` (gitcommit, gitpatch, script and line), see Q6. — [Docs] [DrWatson save docs](https://juliadynamics.github.io/DrWatson.jl/stable/save/)
-- **Formal provenance model (mem):** W3C PROV (PROV-DM/PROV-O, 2013) models entities, activities, and agents for provenance graphs. It is relevant if machine-readable run provenance is wanted. — [Report/Std] [W3C PROV Overview](https://www.w3.org/TR/prov-overview/) (mem)
-- **Lab-notebook practice (mem):** Schnell, S. (2015). Ten simple rules for a computational biologist's laboratory notebook. *PLoS Comput. Biol.* 11(9):e1004385, [doi:10.1371/journal.pcbi.1004385](https://doi.org/10.1371/journal.pcbi.1004385). — [PR] (mem)
+**(a) A methods section that pins formulation, parameters, and code version**
+- **NASEM Finding 4-2:** "the methods section of a traditional scientific paper is insufficient to convey the necessary information" for complex computational results. **Recommendation 4-1:** "researchers should convey clear, specific, and complete information about any computational methods and data products", covering input data, computational steps, and the computational environment. — [Report] [NASEM 2019, ch. 4](https://www.nationalacademies.org/read/25303/chapter/7), [doi:10.17226/25303](https://doi.org/10.17226/25303)
+- **Software citation must be version-specific.** The *Specificity* principle says citations should identify "the exact version used" (version or revision numbers). The *Accessibility* principle says they should give access to the software and its metadata. — [PR] Smith, A.M., Katz, D.S., Niemeyer, K.E., FORCE11 SCWG (2016). Software citation principles. *PeerJ Comput. Sci.* 2:e86, [doi:10.7717/peerj-cs.86](https://doi.org/10.7717/peerj-cs.86)
+- **Persistent identifiers and core metadata are essential.** The guide covers citing software one developed oneself. — [PR] Katz, D.S., Chue Hong, N.P., et al. (2021). Recognizing the value of software: a software citation guide. *F1000Research* 9:1257 (v2), [doi:10.12688/f1000research.26932.2](https://doi.org/10.12688/f1000research.26932.2)
+- **FAIR4RS:** research software needs principles adapted to its "continuous evolution and versioning". — [PR] Barker, M., Chue Hong, N.P., Katz, D.S., et al. (2022). *Scientific Data* 9:622, [doi:10.1038/s41597-022-01710-x](https://doi.org/10.1038/s41597-022-01710-x)
+- **Rules for traceability:** Sandve et al. Rule 1 (track how every result was produced), Rule 3 (archive exact versions of external programs), Rule 9 (connect textual statements to underlying results). — [PR] [Sandve et al. 2013, doi:10.1371/journal.pcbi.1003285](https://doi.org/10.1371/journal.pcbi.1003285)
+- **Release archiving (mem):**
+  - GitHub's Zenodo integration mints a DOI per tagged release plus a concept DOI. — [Docs] [GitHub Docs: Referencing and citing content](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content) (mem)
+  - CITATION.cff gives machine-readable citation metadata. — [Docs] [Citation File Format](https://citation-file-format.github.io/) (mem)
+  - Keep a Changelog 1.1.0 groups changes under Added/Changed/Deprecated/Removed/Fixed. — [Docs] [keepachangelog.com](https://keepachangelog.com/en/1.1.0/) (mem)
+  - Semantic Versioning 2.0.0. — [Docs] [semver.org](https://semver.org/) (mem)
 
-**Venue requirements for the new article**
-- **JOSS (software paper).** Reviewers check:
-  - an OSI-approved license file;
-  - "clear research impact or credible scholarly significance";
-  - "substantial scholarly effort" with an open development history. Recently public repositories need "at least six months of public development history". Repositories made public just before submission are flagged.
-  - documentation: statement of need, automated installation, examples, API docs, community guidelines;
-  - installation and verification of "core functionality";
-  - tests: "Authors are strongly encouraged to include an automated test suite covering the core functionality".
+**(b) Citable evidence that the refactored code reproduces FEAD 2026**
+- **NASEM Finding 4-3:** "Computational reproducibility, within the range of thoughtfully assessed uncertainties, can be expected". The report accepts relaxing bitwise identity to "reproducible results within an accepted range of variation" once numerical issues are understood. — [Report] [NASEM 2019, ch. 4](https://www.nationalacademies.org/read/25303/chapter/7)
+- **Elsevier's data options.** Its research-data guidelines define journal options from A (encourage deposit and citation) through B (encouraged deposit, citation, and linking, or a data availability statement), C (deposit, citation, and linking *required*, unless a statement explains why data cannot be shared), and D (required, without the statement alternative), to E (C plus peer review of the data). Each journal's Guide for Authors states which option it uses. — [Docs] [Elsevier research data guidelines](https://www.elsevier.com/authors/author-resources/research-data/data-guidelines); [Elsevier data statement](https://www.elsevier.com/authors/author-resources/research-data/data-statement)
+- **Elsevier's research data policy** names "software, algorithms, protocols, methods" among research data and states that data "should be made available free of charge … wherever possible and with minimal reuse restrictions". — [Docs] [Elsevier research data policy](https://www.elsevier.com/about/policies-and-standards/research-data)
+- The verification methods that back a citable tolerance claim (bitwise legacy mode, legacy noise-floor ensembles, metamorphic and analytical oracles, Taylor/complex-step tests) are in Q1–Q5 and Q8 of these notes.
 
-  Significance signals include "Demonstrated performance improvements or novel capabilities compared to alternatives". The paper must contain a statement of need, state of the field, software design, research impact statement, and AI-usage disclosure, and must not include API documentation. — [Docs] [JOSS review criteria](https://joss.readthedocs.io/en/latest/review_criteria.html) (fetched Oct 2026)
-- **SoftwareX (Elsevier Original Software Publication).**
-  - Short paper (listed as up to 6 pages or 3,000 words) plus an open-source distribution. Code must be freely available.
-  - The code-metadata table accepts only GitHub repositories, which must have a README.md and a licence file.
-  - Updates to a published SoftwareX article use a "Version [number] – [title]" software-update format. A significant new major release may need a new OSP.
+**(c) Deliberate deviations from the 2026 formulation: what exists in the legacy code, and literature to justify changes**
+- **[repo] Legacy behaviors that any "cleaned-up" formulation would change:**
+  - The objective returned to MMA is rounded to 3 decimals (Full_Domain/NEMOpt_main.jl:79,104; Domain_Reduction/NEMOpt-DR_main.jl:78,104).
+  - The gradient uses the rounded ν₁₂ (NEMOpt_main.jl:80,117).
+  - p and β continuation is triggered by the objective-call counter `iter` (l. 45, 90–102). β steps every 10 calls in Full_Domain and every 5 in Domain_Reduction (NEMOpt-DR_main.jl:97).
+  - An MMA `s_init` update inside `Objective` appears to have no effect, because it assigns a local variable (l. 100).
+  - Exported A and P are rounded to 4 digits (l. 85–86).
+  - A second steep projection uses β₂ = 200, ω₂ = 0.05 (l. 21).
+  - The Newton stopping test is normalized by a displacement scale, `R_Norm/Rep_MU > TOL` (Full_Domain/NEMOpt.jl:375,388).
+- **Continuation and penalization are path-defining choices.** Trajectories of penalized optima can be discontinuous, and continuation may not yield 0–1 designs. — [PR] [Stolpe & Svanberg 2001, doi:10.1007/s001580050177](https://doi.org/10.1007/s001580050177). Projection and β-continuation affect convergence and robustness. — [PR] Wang, Lazarov & Sigmund 2011, [doi:10.1007/s00158-010-0602-y](https://doi.org/10.1007/s00158-010-0602-y) (mem). Local minima and continuation. — [PR] Sigmund & Petersson 1998, [doi:10.1007/BF01214002](https://doi.org/10.1007/BF01214002) (mem)
+- **MMA reference for describing optimizer settings (mem):** Svanberg, K. (1987). The method of moving asymptotes—a new method for structural optimization. *Int. J. Numer. Meth. Eng.* 24(2):359–373, [doi:10.1002/nme.1620240207](https://doi.org/10.1002/nme.1620240207). — [PR] (mem)
+- **Describing the method relative to the prior paper (text recycling).**
+  - TRRP Best Practices v1.1 (2021): recycle text "where consistency of language is needed for accurate communication" (mainly methods); check permissions for substantial reuse of published material; disclose recycling to editors (cover letter with citations) and readers (e.g., a footnote); do not misrepresent novelty through duplicate publication or "salami slicing". — [Grey/Report] [TRRP Best Practices for Researchers](https://textrecycling.org/resources/best-practices-for-researchers/)
+  - COPE / BioMed Central guidelines: cited overlap in methods may be acceptable; undisclosed overlap, or overlap in results, discussion, or conclusions, is unlikely to be. — [Report] [COPE text recycling guidelines](https://nairobi2021.iamcr.org/publicationethics.org/files/Web_A29298_COPE_Text_Recycling.pdf)
 
-  Sources: [Grey/Docs] [SoftwareX software-update template v6 (Mar 2026)](https://legacyfileshare.elsevier.com/promis_misc/softwarex-software-update-template.docx); [Elsevier journal listing](https://shop.elsevier.com/journals/softwarex/2352-7110); [Cirad journal notice](https://ou-publier.cirad.fr/en/node/5493). The official Guide for Authors was not retrieved.
-- **SMO "Replication of results".** SMO's submission guidelines require a "Replication of results" section: "It is desirable that papers, especially on new methodology, should help readers reproduce results presented in the paper". The 2019 editorial explains the aim of a description "detailed enough" for replication consistent with the paper's claims, notes the terminology debate (citing Plesser), and says almost all SMO papers concern computational algorithms. — [PR, editorial] Haftka, R.T., Zhou, M., Queipo, N.V. (2019). Replication of results. *Struct. Multidisc. Optim.* 60(2):405–409, [doi:10.1007/s00158-019-02298-4](https://doi.org/10.1007/s00158-019-02298-4); [SMO submission guidelines](https://link.springer.com/journal/158/submission-guidelines) (content via search snippet; direct fetch blocked by Springer authentication)
-- **SMO educational articles.** In practice they print the complete code (e.g., Sigmund's 99-line code in an appendix plus web download), are aimed at students and newcomers, and stress compactness. Official requirements were not retrieved. — [Grey] [DTU TopOpt: 99-line code page](https://www.topopt.mek.dtu.dk/apps-and-software/a-99-line-topology-optimization-code-written-in-matlab); (mem) Sigmund, O. (2001). A 99 line topology optimization code written in Matlab. *SMO* 21(2):120–127, [doi:10.1007/s001580050176](https://doi.org/10.1007/s001580050176)
-- **FEAD / CMAME:** the journals' specific data/code-availability policies could not be retrieved. Both are Elsevier journals, and FEAD's aims state that numerical demonstration is generally a necessary ingredient. — [Grey] [journal listing](https://scholars.ntou.edu.tw/cris/journals/journals00133?locale=en)
+**(d) Journal replication and reporting expectations for TO papers**
+- **SMO.** The submission guidelines list a mandatory "Replication of results" section: "It is desirable that papers, especially on new methodology, should help readers reproduce results presented in the paper". The 2019 editorial says the section asks for a description "detailed enough" to replicate results consistent with the paper's claims, notes the terminology debate (citing Plesser 2018), and says almost all SMO papers concern computational algorithms. Published papers fill the section in different ways: code on request, a description of the implementation software, or a claim that the method description suffices. — [PR, editorial] Haftka, R.T., Zhou, M., Queipo, N.V. (2019). Replication of results. *Struct. Multidisc. Optim.* 60(2):405–409, [doi:10.1007/s00158-019-02298-4](https://doi.org/10.1007/s00158-019-02298-4); [SMO submission guidelines](https://link.springer.com/journal/158/submission-guidelines) (wording via search snippet; direct fetch blocked by Springer authentication)
+- **Sigmund (2022).** Fair evaluation against existing methods is "an open question". Where common benchmarks are lacking or impractical, "the responsibility of fair evaluation of contributions is up to authors". The note lists recommendations, tools, and concepts for good practice. Secondary sources cite it for converting designs to binary before comparison and checking closeness of thresholded designs. — [PR] Sigmund, O. (2022). *Struct. Multidisc. Optim.* 65(11):315, [doi:10.1007/s00158-022-03427-2](https://doi.org/10.1007/s00158-022-03427-2); secondary: [2025 CMES benchmarking study](https://www.sciopen.com/local/article_pdf/10.32604/cmes.2025.065935.pdf)
+- **FEAD and CMAME.** Both are Elsevier journals that follow one of the A–E research-data options above. Their specific option and any code-availability wording could not be retrieved: the ScienceDirect Guide for Authors returned HTTP 403. — [Docs] [Elsevier research data guidelines](https://www.elsevier.com/authors/author-resources/research-data/data-guidelines)
+- *(One line, per scope.)* Software-paper venues (JOSS; SoftwareX) review the code itself. JOSS, for example, requires an OSI license, automated tests, and at least six months of public development history for recently public repositories. They are not the target here. — [Docs] [JOSS review criteria](https://joss.readthedocs.io/en/latest/review_criteria.html)
 
-**Reporting performance improvements**
-- **Hoefler & Belli (SC'15), twelve rules** (verified from the paper PDF):
-  1. Report whether the speedup base case is a single parallel process or the best serial execution, plus the base case's absolute performance; "never report ratios without absolute values".
+**(e) Run-level provenance for every reported result**
+- DrWatson `tagsave` adds `:gitcommit` "to establish reproducibility of results using Git". It adds `:gitpatch` (the diff) when the repository is dirty and `storepatch=true`. `@tagsave` adds `:script` (path and line). `gitdescribe` returns tag/commit plus a `-dirty` suffix. `produce_or_load` keys results by parameters. — [Docs] [DrWatson.jl saving tools](https://juliadynamics.github.io/DrWatson.jl/stable/save/); (mem) Datseris et al. (2020) *JOSS* 5(54):2673, [doi:10.21105/joss.02673](https://doi.org/10.21105/joss.02673)
+- Julia RNG streams "*may change*" between minor releases. Store data or use StableRNGs.jl for reproducible tests. — [Docs] [Julia Random stdlib](https://docs.julialang.org/en/v1/stdlib/Random/)
+- Sandve Rule 6 (record random seeds) and Rule 5 (record intermediate results). — [PR] [Sandve et al. 2013](https://doi.org/10.1371/journal.pcbi.1003285)
+- Optional machine-readable provenance: W3C PROV (entities, activities, agents). — [Std] [W3C PROV Overview](https://www.w3.org/TR/prov-overview/) (mem). Lab-notebook practice: Schnell (2015) *PLoS Comput. Biol.* 11(9):e1004385, [doi:10.1371/journal.pcbi.1004385](https://doi.org/10.1371/journal.pcbi.1004385) (mem)
+- **[repo]** Current outputs record `Parameters.txt` and `Description.txt` in a timestamped folder (Full_Domain/NEMOpt.jl:17,38–39) but no git commit, package versions, BLAS configuration, or solver path. The repository has no Project.toml or Manifest.toml.
+
+**(f) Performance reporting, only if computational cost is reported**
+- **Hoefler & Belli (SC'15), twelve rules** (verified from the paper):
+  1. Report whether the speedup base case is one parallel process or the best serial execution, plus its absolute performance; "never report ratios without absolute values".
   2. Justify reporting subsets; "report all results, not just the best".
   3. Arithmetic mean only for costs, harmonic mean for rates.
   4. Avoid summarizing ratios; if unavoidable, use the geometric mean.
-  5. Report whether measurements are deterministic, and give confidence intervals for nondeterministic data.
+  5. Report whether measurements are deterministic, with confidence intervals otherwise.
   6. Do not assume normality without diagnostics.
-  7. Compare nondeterministic data in a statistically sound way (e.g., non-overlapping CIs, ANOVA).
-  8. Check whether mean or median is meaningful, or whether other percentiles are needed.
+  7. Use statistically sound comparisons (e.g., non-overlapping CIs, ANOVA).
+  8. Check whether mean or median is meaningful.
   9. Document all varying factors and the complete setup (software, hardware, techniques).
-  10. For parallel timings, report measurement, synchronization, and summarization methods.
+  10. Report measurement, synchronization, and summarization for parallel timings.
   11. Show upper performance bounds where possible.
-  12. Plot enough information to interpret results; connect points only when interpolation is valid.
+  12. Plot enough to interpret results.
 
-  The survey behind the rules sampled 120 papers from three HPC conferences and found reporting practice lacking. — [PR] Hoefler, T., Belli, R. (2015). Scientific benchmarking of parallel computing systems: twelve ways to tell the masses when reporting performance results. *SC'15*, Art. 73, [doi:10.1145/2807591.2807644](https://doi.org/10.1145/2807591.2807644) ([PDF](https://htor.inf.ethz.ch/publications/img/hoefler-scientific-benchmarking.pdf))
-- **Robust benchmarking in Julia.** Chen & Revels argue that the *minimum* is the most robust estimator of true run time under timer error and OS jitter, because "variations never reduce the run time". BenchmarkTools.jl implements an automatic heuristic for evaluations per sample. A 2026 critique notes the approach assumes memoryless, sparse noise. — [Preprint/PR workshop] Chen, J., Revels, J. (2016). Robust benchmarking in noisy environments. [arXiv:1608.04295](https://arxiv.org/pdf/1608.04295) (MIT copy lists Edelman as co-author: [PDF](https://math.mit.edu/~edelman/publications/robust_benchmarking.pdf)); critique [arXiv:2606.17261](https://arxiv.org/pdf/2606.17261)
-
-**Reusing material from the prior article ethically**
-- **Text Recycling Research Project, Best Practices for Researchers v1.1 (Apr 2021, CC BY 4.0):**
-  - recycle text "where consistency of language is needed for accurate communication" (mainly methods);
-  - check permissions for substantial reuse, since most publishers take copyright and reuse beyond the contract needs permission;
-  - tell editors at submission (cover letter, citations, explanation) and tell readers (e.g., a footnote);
-  - do not misrepresent novelty; duplicate publication and "salami slicing" are unacceptable.
-
-  — [Grey/Report] Hall, S., Moskovitz, C., Pemberton, M. (2021). [TRRP Best Practices for Researchers](https://textrecycling.org/resources/best-practices-for-researchers/); guide for researchers: [Georgia Southern repository](https://digitalcommons.georgiasouthern.edu/writing-linguistics-facpubs/257)
-- **COPE text-recycling guidelines (developed by BioMed Central editors with COPE).** Editors weigh how much text is recycled, where it occurs, and whether the source is acknowledged. Cited overlap in methods may be acceptable; undisclosed overlap, or overlap in results, discussion, or conclusions, is unlikely to be. — [Report/Docs] [COPE text recycling guidelines PDF](https://nairobi2021.iamcr.org/publicationethics.org/files/Web_A29298_COPE_Text_Recycling.pdf); [COPE forum summary, 12 Mar 2013](https://publicationethics.org/node/12974)
+  — [PR] Hoefler, T., Belli, R. (2015). *SC'15*, Art. 73, [doi:10.1145/2807591.2807644](https://doi.org/10.1145/2807591.2807644) ([PDF](https://htor.inf.ethz.ch/publications/img/hoefler-scientific-benchmarking.pdf))
+- **Chen & Revels (2016).** The minimum is the most robust run-time estimator under timer error and OS jitter, because "variations never reduce the run time". BenchmarkTools.jl automates the evaluations-per-sample choice. A 2026 critique notes the method assumes memoryless, sparse noise. — [Preprint] [arXiv:1608.04295](https://arxiv.org/pdf/1608.04295); critique [arXiv:2606.17261](https://arxiv.org/pdf/2606.17261)
 
 ### Inferences
-- **Decision granularity.** Write one record per decision that could change results or architecture: solver choice, assembly symmetry, threading, continuation trigger, removal of rounding, gradient correction, filter discretization, MMA version, data layout. Write one umbrella record for "pure refactors verified bitwise in legacy mode" that lists the commits. Following Buchgeher et al. and the ICSA 2026 finding, keep a real "proposed → accepted" step: open the record with the alternatives *before* running the verification, then accept it with the evidence attached.
-- **Recommended minimal template for NEMOpt** (`docs/decisions/NNNN-short-title.md`; Nygard numbering and immutability, MADR's "Considered Options" and "Confirmation", extended with numerics fields):
+- **What the new research paper should contain, item by item:**
+  - **(a) Methods.** A short "Computational implementation" paragraph that:
+    - cites the FEAD 2026 article for the base method;
+    - cites the refactored code by release DOI (e.g., NEMOpt vX.Y.Z, Zenodo DOI) and the legacy release that produced FEAD 2026 (tagged and archived retroactively, e.g., `v1.0.0-fead2026`);
+    - gives a parameter table per result: F_M, mesh, E, ν, r, ε, SIMP law, p/β schedules and their trigger (per MMA outer iteration or per objective call), β₂/ω₂, MMA variant and settings, stopping rule, Newton TOL and load step, and initial design (file hash or seed).
+  - **(b) Verification statement.** One paragraph, plus a supplementary table or archived verification report with its own DOI, stating:
+    - "In legacy-compatibility mode, NEMOpt vX reproduces the FEAD 2026 runs bit-for-bit on [environment]";
+    - "In default mode, single-evaluation quantities agree to [band], gradients to [band], and full runs fall within the legacy round-off ensemble on [metrics]".
+
+    Cite NASEM Finding 4-3 for the tolerance-based definition. This is citable evidence that later readers and reviewers can check.
+  - **(c) Deviation register.** A table "Differences from Güven & Özdemir (2026)" with one row per results-changing decision record. Columns: what changed, why (with citations), legacy switch name, and effect on the FEAD 2026 benchmark (re-run value vs. published value). Candidate rows, from the [repo] facts:
+    - remove the 3-decimal rounding of J returned to MMA;
+    - use the unrounded ν₁₂ in ∇J;
+    - trigger continuation per MMA outer iteration instead of per objective call;
+    - make the β-dependent MMA `s_init` update actually take effect, or delete it;
+    - any SIMP/projection modification;
+    - explicit solver choice (LU vs. Cholesky);
+    - Newton tolerance normalization.
+  - **(d) Journal fit.** For SMO, the "Replication of results" section can point to the release DOI, the parameter table, the deviation register, and the verification report. For FEAD or CMAME, choose a data statement consistent with the journal's Elsevier option (C or stricter means deposit and link). Deposit final designs, full-precision histories, and run scripts with the code DOI. Following Sigmund (2022), compare against the FEAD 2026 designs fairly: same mesh, volume fraction, and evaluator; thresholded designs re-analyzed; M_nd reported.
+  - **(e) Provenance.** Every figure and table value is generated by a script from `tagsave`d result files. Each file holds: git describe, dirty patch, Manifest.toml hash, `versioninfo()` (Julia, OS, CPU), BLAS vendor and thread count, SuiteSparse version, solver path taken, legacy-mode flags, parameter dict, seed or initial-design hash, wall time, and full-precision outputs. The paper's supplementary material maps each figure/table to result-file IDs (Sandve Rule 9).
+  - **(f) Cost (only if reported).** Report absolute legacy and refactored times on the same machine and environment (Rule 1). Separate per-evaluation cost (implementation speedup at a fixed number of objective/gradient calls) from time to solution (which includes algorithmic changes to iteration counts). Report BenchmarkTools minima and distributions over repeated runs (Chen & Revels; Rules 5–7) and the full setup (Rule 9). Do not average speedup ratios arithmetically (Rule 4).
+- **Recommended minimal decision-record template for NEMOpt** (`docs/decisions/NNNN-short-title.md`): Nygard numbering and immutability, MADR's "Considered Options" and "Confirmation", plus numerics and paper-traceability fields:
 
   ```markdown
   ---
   id: NDR-0007                       # monotonic, never reused (Nygard)
-  title: Assemble symmetric K and solve with CHOLMOD Cholesky
+  title: Trigger p/β continuation per MMA outer iteration
   date: 2026-11-03
   status: proposed | accepted | superseded-by NDR-00xx | rejected
   decision-makers: [M. Güven, ...]
@@ -332,50 +358,45 @@ The new article then has a traceable answer to three questions: which results of
   related: [NDR-0003]
   ---
   ## Context
-  Problem, current legacy behavior (file:line), constraints, decision drivers
-  (speed, memory, correctness, maintainability, fidelity to FEAD 2026 results).
+  Legacy behavior with file:line (e.g., Full_Domain/NEMOpt_main.jl:45,90–102: schedule
+  advances per objective call, so MMA inner iterations shift it); decision drivers
+  (correctness, fidelity to FEAD 2026, speed, maintainability).
   ## Considered options
-  1. Keep UMFPACK LU via `\` (legacy)  2. CHOLMOD Cholesky on Symmetric(K)  3. ...
+  1. Keep per-call trigger (legacy)  2. Per outer iteration  3. Adaptive (e.g., on KKT/change)
   Pros/cons per option.
   ## Decision
-  What was chosen, scope (Full_Domain / Domain_Reduction / both).
+  Chosen option; scope (Full_Domain / Domain_Reduction / both).
   ## Rationale and citations
-  Why; primary sources with DOIs (e.g., Higham 2002 for stability; Julia docs for `\` dispatch).
+  Primary sources with DOIs (e.g., Stolpe & Svanberg 2001; Wang et al. 2011).
   ## Effect on numerical results
   affects-results: yes | no | bitwise-only
-  legacy-switch: `opts.linear_solver = :legacy_backslash` (default in legacy mode)
-  expected magnitude: e.g., rel. diff in A ≤ 1e-11 (κ-based estimate), J trajectory may diverge after iter k
+  deviation-from-FEAD2026-formulation: yes | no   # if yes → row in paper's deviation table
+  legacy-switch: `opts.continuation_trigger = :objective_call`
+  expected/observed magnitude: e.g., trajectory diverges from iter k; final ν12 within legacy ensemble [a, b]
   ## Verification evidence (Confirmation)
-  - Test IDs: K-012 (kernel bitwise/ulp), E-004 (single-evaluation tolerance band), S-003 (Taylor slope 2.00±0.02), R-002 (full-run ensemble check)
-  - Tolerance bands and how they were derived (legacy noise-floor run IDs, κ estimate)
-  - Results vs. FEAD 2026 Table/Figure X: reproduced to N digits | changed (explain)
-  ## Performance evidence
-  Hardware, OS, Julia/BLAS/SuiteSparse versions, threads; BenchmarkTools min & median,
-  n samples; absolute times for legacy and new (Hoefler–Belli rules 1, 5, 9)
+  - Test IDs: K-012 (kernel), E-004 (single evaluation), S-003 (Taylor slope), R-002 (full-run ensemble)
+  - Tolerance bands and their derivation (noise-floor run IDs, κ estimate)
+  - FEAD 2026 Table/Figure X: reproduced to N digits | changed (value, reason)
+  ## Performance evidence (only if cost will be reported)
+  Hardware, OS, Julia/BLAS/SuiteSparse versions, threads; BenchmarkTools min & distribution;
+  absolute legacy and new times (Hoefler–Belli rules 1, 5, 9)
+  ## Paper traceability
+  New-paper section/figure/table affected; result-file IDs; release tag + Zenodo DOI
   ## Consequences
   Positive/negative, follow-ups, risks.
   ## Links
-  commit(s)/PR, git tag, CHANGELOG entry, output data DOI
+  commit(s)/PR, CHANGELOG entry
   ```
 
-- **Traceability chain for the new article:**
-  - Tag the legacy code that produced the FEAD 2026 results, archive it on Zenodo with a DOI, and cite it as the software version used for the published paper.
-  - Each refactor release gets a SemVer tag, a CHANGELOG entry that links decision IDs, and a Zenodo version DOI.
-  - Every result file gets DrWatson `tagsave` provenance.
-  - A "reproduction table" in the new article lists, for each published FEAD 2026 case: the legacy value, the refactored-legacy-mode value (bitwise yes/no), the refactored-default-mode value, the tolerance band and its origin, and the decision IDs that explain any difference.
-- **Reporting speedups.** Separate *implementation* speedups (same algorithm, same number of objective/gradient evaluations: time per Newton iteration, per adjoint solve, per objective call) from *algorithmic* changes (different solver, convergence, or iteration counts: time to solution). Report absolute legacy and new times on the same machine and environment (Rule 1). Report variability with BenchmarkTools minima *and* distributions (Chen & Revels; Rules 5–7). Report the full environment (Rule 9). Do not summarize per-case speedup ratios with an arithmetic mean (Rule 4).
-- **Venue fit.**
-  - *Software-centric (JOSS or SoftwareX):* requires a public repository with a real development history (JOSS: six months), tests, documentation, and verifiable performance claims. The decision records and the verification suite are direct evidence for the "functionality", "tests", and "performance" criteria.
-  - *Methods-centric (SMO, including a possible educational article; FEAD; CMAME):* requires a "Replication of results" section (SMO) and code/data availability. The legacy reproduction table plus the archived DOIs satisfy it.
-  - Either way, the new article must cite the FEAD 2026 article for the method. If corrected numerics change results, the article should state explicitly which published figures/tables are reproduced and which differ and why. This matches the transparency expected by TRRP/COPE and the novelty-integrity concern about duplicate publication.
-- **Reuse of FEAD 2026 text and figures.** Methods text may be recycled with citation and disclosure to the editor. Results, figures, and discussion should be new or explicitly reproduced with permission and attribution, depending on the FEAD copyright or license terms (not verified; see Gaps).
+- **Process.** Following Buchgeher et al. and the ICSA 2026 finding, open each record as "proposed", with the alternatives and the pre-registered acceptance criteria, *before* running verification. Then accept it with the evidence attached. Write one umbrella record per batch of pure refactors that were verified bitwise in legacy mode, listing the commits. Each results-changing record becomes one row of the paper's deviation table.
 
 ### Gaps
-- Tyree & Akerman's exact template fields, the Jansen & Bosch full text, and ISO/IEC/IEEE 42010:2022 clause wording were not accessed (paywalled; mem/secondary).
-- No empirical study was found on decision documentation *specifically in research software* or computational-science codes. The ADR evidence is from general open source and industry.
-- FEAD and CMAME code/data-availability policies, Advances in Engineering Software's original-software requirements, SMO's official "Educational article" requirements, and the official SoftwareX Guide for Authors were not retrieved. Check the current Guides for Authors before choosing a venue.
-- The copyright/license status of the FEAD 2026 article (open access CC BY vs. copyright transfer), which governs figure reuse, is unknown.
-- Zenodo/GitHub, CITATION.cff, Keep a Changelog, SemVer, and W3C PROV details are from prior knowledge (mem), not re-fetched.
+- FEAD's and CMAME's specific Elsevier data option and code-availability wording could not be retrieved (Guide for Authors returned HTTP 403). Check before submission.
+- The full text of Sigmund (2022) was not accessible. Its exact recommendations (e.g., on reporting M_nd, post-evaluation, and code sharing) should be read directly before citing specifics.
+- The current SMO guideline wording was seen only via a search snippet (mandatory section with "desirable" phrasing); the 2019 editorial's full text was not read.
+- The copyright/license terms of the FEAD 2026 article, which govern figure and text reuse in the new paper, are unknown.
+- No empirical study was found on decision documentation in computational-science or TO research codes specifically. Tyree & Akerman's template fields and ISO 42010 clause wording were not verified (paywalled; mem).
+- Zenodo/GitHub, CITATION.cff, Keep a Changelog, SemVer, W3C PROV, and Svanberg 1987 details are from prior knowledge (mem).
 
 ---
 
